@@ -1,0 +1,92 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "placeholder_will_be_generated_on_first_build",
+    "entities": [
+      {
+        "tableName": "exercises",
+        "createSql": "CREATE TABLE IF NOT EXISTS `exercises` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `muscle_groups` TEXT NOT NULL, `secondary_muscle_groups` TEXT NOT NULL, `equipment` TEXT NOT NULL, `difficulty` TEXT NOT NULL, `instructions` TEXT NOT NULL, `youtube_video_id` TEXT, `is_custom` INTEGER NOT NULL, `is_deleted` INTEGER NOT NULL, `created_at` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {"fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "name", "columnName": "name", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "muscleGroups", "columnName": "muscle_groups", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "secondaryMuscleGroups", "columnName": "secondary_muscle_groups", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "equipment", "columnName": "equipment", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "difficulty", "columnName": "difficulty", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "instructions", "columnName": "instructions", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "youtubeVideoId", "columnName": "youtube_video_id", "affinity": "TEXT", "notNull": false},
+          {"fieldPath": "isCustom", "columnName": "is_custom", "affinity": "INTEGER", "notNull": true},
+          {"fieldPath": "isDeleted", "columnName": "is_deleted", "affinity": "INTEGER", "notNull": true},
+          {"fieldPath": "createdAt", "columnName": "created_at", "affinity": "INTEGER", "notNull": true}
+        ],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "workout_plans",
+        "createSql": "CREATE TABLE IF NOT EXISTS `workout_plans` (`id` TEXT NOT NULL, `name` TEXT NOT NULL, `split_type` TEXT NOT NULL, `days_per_week` INTEGER NOT NULL, `muscle_groups` TEXT NOT NULL, `created_at` INTEGER NOT NULL, `is_template` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {"fieldPath": "id", "columnName": "id", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "name", "columnName": "name", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "splitType", "columnName": "split_type", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "daysPerWeek", "columnName": "days_per_week", "affinity": "INTEGER", "notNull": true},
+          {"fieldPath": "muscleGroups", "columnName": "muscle_groups", "affinity": "TEXT", "notNull": true},
+          {"fieldPath": "createdAt", "columnName": "created_at", "affinity": "INTEGER", "notNull": true},
+          {"fieldPath": "isTemplate", "columnName": "is_template", "affinity": "INTEGER", "notNull": true}
+        ],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "workout_plan_exercises",
+        "createSql": "CREATE TABLE IF NOT EXISTS `workout_plan_exercises` (`id` TEXT NOT NULL, `plan_id` TEXT NOT NULL, `exercise_id` TEXT NOT NULL, `day_index` INTEGER NOT NULL, `order_index` INTEGER NOT NULL, `sets` INTEGER NOT NULL, `reps` INTEGER NOT NULL, `notes` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`plan_id`) REFERENCES `workout_plans`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE, FOREIGN KEY(`exercise_id`) REFERENCES `exercises`(`id`) ON UPDATE NO ACTION ON DELETE RESTRICT)",
+        "fields": [],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [
+          {"name": "index_workout_plan_exercises_plan_id", "unique": false, "columnNames": ["plan_id"]},
+          {"name": "index_workout_plan_exercises_exercise_id", "unique": false, "columnNames": ["exercise_id"]}
+        ],
+        "foreignKeys": [
+          {"table": "workout_plans", "onDelete": "CASCADE", "onUpdate": "NO ACTION", "columns": ["plan_id"], "referencedColumns": ["id"]},
+          {"table": "exercises", "onDelete": "RESTRICT", "onUpdate": "NO ACTION", "columns": ["exercise_id"], "referencedColumns": ["id"]}
+        ]
+      },
+      {
+        "tableName": "workout_sessions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `workout_sessions` (`id` TEXT NOT NULL, `plan_id` TEXT, `started_at` INTEGER NOT NULL, `completed_at` INTEGER, `notes` TEXT NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`plan_id`) REFERENCES `workout_plans`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL)",
+        "fields": [],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [{"name": "index_workout_sessions_plan_id", "unique": false, "columnNames": ["plan_id"]}],
+        "foreignKeys": [
+          {"table": "workout_plans", "onDelete": "SET NULL", "onUpdate": "NO ACTION", "columns": ["plan_id"], "referencedColumns": ["id"]}
+        ]
+      },
+      {
+        "tableName": "session_sets",
+        "createSql": "CREATE TABLE IF NOT EXISTS `session_sets` (`id` TEXT NOT NULL, `session_id` TEXT NOT NULL, `plan_exercise_id` TEXT, `set_number` INTEGER NOT NULL, `reps_completed` INTEGER NOT NULL, `weight_kg` REAL, `completed_at` INTEGER NOT NULL, PRIMARY KEY(`id`), FOREIGN KEY(`session_id`) REFERENCES `workout_sessions`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE, FOREIGN KEY(`plan_exercise_id`) REFERENCES `workout_plan_exercises`(`id`) ON UPDATE NO ACTION ON DELETE SET NULL)",
+        "fields": [],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [
+          {"name": "index_session_sets_session_id", "unique": false, "columnNames": ["session_id"]},
+          {"name": "index_session_sets_plan_exercise_id", "unique": false, "columnNames": ["plan_exercise_id"]}
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "user_preferences",
+        "createSql": "CREATE TABLE IF NOT EXISTS `user_preferences` (`id` INTEGER NOT NULL, `rest_timer_seconds` INTEGER NOT NULL, `available_equipment` TEXT NOT NULL, `min_difficulty` TEXT NOT NULL, `max_difficulty` TEXT NOT NULL, `exercises_per_muscle_group` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [],
+        "primaryKey": {"autoGenerate": false, "columnNames": ["id"]},
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'placeholder_will_be_generated_on_first_build')"
+    ]
+  }
+}
