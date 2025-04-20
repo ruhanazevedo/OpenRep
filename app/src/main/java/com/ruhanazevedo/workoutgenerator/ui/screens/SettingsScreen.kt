@@ -132,7 +132,7 @@ fun SettingsScreen(
             }.coerceAtLeast(0)
             val maxIdx = difficulties.indexOfFirst {
                 it.name.equals(prefs.maxDifficulty, ignoreCase = true)
-            }.coerceAtLeast(difficulties.lastIndex)
+            }.coerceIn(0, difficulties.lastIndex)
 
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Row(
