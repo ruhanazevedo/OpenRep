@@ -4,9 +4,11 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruhanazevedo.workoutgenerator.data.db.entity.UserPreferencesEntity
 import com.ruhanazevedo.workoutgenerator.data.repository.PreferencesRepository
+import com.ruhanazevedo.workoutgenerator.domain.model.Difficulty
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,15 +29,24 @@ class SettingsViewModel @Inject constructor(
 
     fun setAvailableEquipment(equipment: List<String>) = update { it.copy(availableEquipment = equipment) }
 
-    fun setMinDifficulty(difficulty: String) = update { it.copy(minDifficulty = difficulty) }
+    fun setMinDifficulty(difficulty: String) = update { current ->
+        val newMin = Difficulty.from(difficulty)
+        val currentMax = Difficulty.from(current.maxDifficulty)
+        if (newMin <= currentMax) current.copy(minDifficulty = difficulty) else current
+    }
 
-    fun setMaxDifficulty(difficulty: String) = update { it.copy(maxDifficulty = difficulty) }
+    fun setMaxDifficulty(difficulty: String) = update { current ->
+        val newMax = Difficulty.from(difficulty)
+        val currentMin = Difficulty.from(current.minDifficulty)
+        if (newMax >= currentMin) current.copy(maxDifficulty = difficulty) else current
+    }
 
     fun setExercisesPerMuscleGroup(count: Int) = update { it.copy(exercisesPerMuscleGroup = count) }
 
     private fun update(transform: (UserPreferencesEntity) -> UserPreferencesEntity) {
         viewModelScope.launch {
-            repository.update(transform(preferences.value))
+            val current = repository.preferences.first()
+            repository.update(transform(current))
         }
     }
 
