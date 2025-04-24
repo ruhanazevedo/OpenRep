@@ -95,4 +95,42 @@ class SettingsViewModelTest {
         advanceUntilIdle()
         assertEquals(5, updates.last().exercisesPerMuscleGroup)
     }
+
+    @Test
+    fun setMinDifficulty_above_max_is_rejected() = runTest {
+        // Default: min=Beginner, max=Advanced. Trying to set min=Advanced is allowed (equal is ok).
+        // Setting min beyond max: set max to Intermediate first, then try min=Advanced (above Intermediate).
+        advanceUntilIdle()
+        viewModel.setMaxDifficulty("Intermediate")
+        advanceUntilIdle()
+        val countBefore = updates.size
+        viewModel.setMinDifficulty("Advanced") // Advanced > Intermediate — should be rejected
+        advanceUntilIdle()
+        // An update is still issued (with unchanged value), so check min was NOT changed
+        assertEquals("Beginner", updates.last().minDifficulty)
+    }
+
+    @Test
+    fun setMaxDifficulty_below_min_is_rejected() = runTest {
+        // Default: min=Beginner, max=Advanced. Set min=Intermediate first, then try max=Beginner (below Intermediate).
+        advanceUntilIdle()
+        viewModel.setMinDifficulty("Intermediate")
+        advanceUntilIdle()
+        viewModel.setMaxDifficulty("Beginner") // Beginner < Intermediate — should be rejected
+        advanceUntilIdle()
+        assertEquals("Advanced", updates.last().maxDifficulty)
+    }
+
+    @Test
+    fun setMinDifficulty_valid_within_range_is_accepted() = runTest {
+        // Default: min=Beginner, max=Advanced. Setting min=Intermediate is valid.
+        advanceUntilIdle()
+        viewModel.setMinDifficulty("Intermediate")
+        advanceUntilIdle()
+        assertEquals("Intermediate", updates.last().minDifficulty)
+        // Also valid: setting max=Intermediate when min=Intermediate (equal boundary)
+        viewModel.setMaxDifficulty("Intermediate")
+        advanceUntilIdle()
+        assertEquals("Intermediate", updates.last().maxDifficulty)
+    }
 }
