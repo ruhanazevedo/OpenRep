@@ -1,9 +1,8 @@
 package com.ruhanazevedo.workoutgenerator.data.seeder
 
 import android.content.Context
+import com.ruhanazevedo.workoutgenerator.data.db.dao.ExerciseDao
 import com.ruhanazevedo.workoutgenerator.data.db.entity.ExerciseEntity
-import com.ruhanazevedo.workoutgenerator.data.mapper.toDomain
-import com.ruhanazevedo.workoutgenerator.data.repository.ExerciseRepository
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.Types
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -15,14 +14,13 @@ import javax.inject.Singleton
 @Singleton
 class DatabaseSeeder @Inject constructor(
     @ApplicationContext private val context: Context,
-    private val exerciseRepository: ExerciseRepository
+    private val exerciseDao: ExerciseDao
 ) {
     suspend fun seedIfNeeded() {
-        val count = exerciseRepository.countSeeded()
+        val count = exerciseDao.countSeeded()
         if (count > 0) return // idempotent — already seeded
 
-        val exercises = loadSeedExercises()
-        val domainExercises = exercises.map { seed ->
+        val entities = loadSeedExercises().map { seed ->
             ExerciseEntity(
                 id = UUID.randomUUID().toString(),
                 name = seed.name,
@@ -35,9 +33,9 @@ class DatabaseSeeder @Inject constructor(
                 isCustom = false,
                 isDeleted = false,
                 createdAt = System.currentTimeMillis()
-            ).toDomain()
+            )
         }
-        exerciseRepository.insertAll(domainExercises)
+        exerciseDao.insertAll(entities)
     }
 
     private fun loadSeedExercises(): List<SeedExercise> {
