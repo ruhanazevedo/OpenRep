@@ -139,9 +139,7 @@ fun WorkoutGeneratorNavHost() {
             ) { backStackEntry ->
                 PlanDetailScreen(
                     planId = backStackEntry.arguments?.getString("planId") ?: "",
-                    onStartWorkout = { planId ->
-                        navController.navigate(Screen.Session.createRoute(planId))
-                    },
+                    onStartWorkout = { navController.navigate(Screen.Session.createRoute(planId)) },
                     onBack = { navController.popBackStack() }
                 )
             }
