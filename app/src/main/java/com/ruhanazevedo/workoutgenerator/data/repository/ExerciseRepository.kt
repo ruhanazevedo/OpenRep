@@ -17,10 +17,19 @@ class ExerciseRepository @Inject constructor(
         list.map { it.toDomain() }
     }
 
+    fun search(query: String, muscleFilter: String): Flow<List<Exercise>> =
+        exerciseDao.search(query, muscleFilter).map { list -> list.map { it.toDomain() } }
+
     fun getById(id: String): Flow<Exercise?> = exerciseDao.getById(id).map { it?.toDomain() }
 
     fun getByMuscleGroup(group: String): Flow<List<Exercise>> =
         exerciseDao.getByMuscleGroup(group).map { list -> list.map { it.toDomain() } }
+
+    suspend fun findByNameIgnoreCase(name: String): Exercise? =
+        exerciseDao.findByNameIgnoreCase(name)?.toDomain()
+
+    suspend fun countPlanReferences(exerciseId: String): Int =
+        exerciseDao.countPlanReferences(exerciseId)
 
     suspend fun insert(exercise: Exercise) = exerciseDao.insert(exercise.toEntity())
 
