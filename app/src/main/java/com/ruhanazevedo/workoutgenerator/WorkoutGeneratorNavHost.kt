@@ -116,7 +116,7 @@ fun WorkoutGeneratorNavHost() {
             composable(
                 route = Screen.EditExercise.route,
                 arguments = listOf(navArgument("exerciseId") { type = NavType.StringType })
-            ) {
+            ) { backStackEntry ->
                 AddExerciseScreen(onBack = { navController.popBackStack() })
             }
 
