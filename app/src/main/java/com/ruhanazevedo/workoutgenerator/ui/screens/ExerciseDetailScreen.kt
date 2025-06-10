@@ -153,14 +153,17 @@ fun ExerciseDetailScreen(
                 value = editableInstructions,
                 onValueChange = { editableInstructions = it },
                 modifier = Modifier.fillMaxWidth(),
-                minLines = 3
+                minLines = 3,
+                enabled = exercise.isCustom
             )
             Spacer(Modifier.height(4.dp))
-            TextButton(
-                onClick = { viewModel.saveInstructions(editableInstructions) },
-                modifier = Modifier.align(Alignment.End)
-            ) {
-                Text("Save instructions")
+            if (exercise.isCustom) {
+                TextButton(
+                    onClick = { viewModel.saveInstructions(editableInstructions) },
+                    modifier = Modifier.align(Alignment.End)
+                ) {
+                    Text("Save instructions")
+                }
             }
 
             exercise.youtubeVideoId?.let { videoId ->
