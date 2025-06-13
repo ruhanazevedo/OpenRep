@@ -54,9 +54,8 @@ class LibraryViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     private val exercises = combine(searchQuery, selectedMuscleGroups) { query, muscles ->
         query to muscles
-    }.flatMapLatest { (query, muscles) ->
-        val muscleFilter = if (muscles.isEmpty()) "" else muscles.first()
-        repository.search(query.trim(), muscleFilter)
+    }.flatMapLatest { (query, _) ->
+        repository.search(query.trim(), "")
     }
 
     private val _uiState = MutableStateFlow(LibraryUiState())
@@ -73,7 +72,7 @@ class LibraryViewModel @Inject constructor(
             combine(exercises, searchQuery, selectedMuscleGroups) { list, query, muscles ->
                 Triple(list, query, muscles)
             }.collect { (list, query, muscles) ->
-                val filtered = if (muscles.size > 1) {
+                val filtered = if (muscles.isNotEmpty()) {
                     list.filter { exercise ->
                         muscles.any { muscle ->
                             exercise.muscleGroups.any { it.equals(muscle, ignoreCase = true) }
