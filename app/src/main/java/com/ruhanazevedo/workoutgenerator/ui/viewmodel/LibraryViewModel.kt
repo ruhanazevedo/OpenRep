@@ -135,7 +135,8 @@ class LibraryViewModel @Inject constructor(
         val toInsert = mutableListOf<Exercise>()
 
         for (i in 0 until array.length()) {
-            val obj = array.optJSONObject(i) ?: run {
+            val obj = array.optJSONObject(i)
+            if (obj == null) {
                 importErrors.add("Entry $i: not an object")
                 skippedCount++
                 continue
