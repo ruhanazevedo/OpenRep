@@ -49,6 +49,20 @@ interface ExerciseDao {
     @Insert(onConflict = OnConflictStrategy.IGNORE)
     suspend fun insertAll(exercises: List<ExerciseEntity>)
 
+    @Query("""
+        SELECT * FROM exercises
+        WHERE is_deleted = 0
+          AND muscle_groups LIKE '%' || :group || '%'
+          AND (:equipmentFilter = '' OR equipment IN (:equipmentList))
+          AND difficulty IN (:difficultyList)
+    """)
+    suspend fun getByMuscleGroupFiltered(
+        group: String,
+        equipmentFilter: String,
+        equipmentList: List<String>,
+        difficultyList: List<String>
+    ): List<ExerciseEntity>
+
     @Query("SELECT COUNT(*) FROM exercises WHERE is_custom = 0 AND is_deleted = 0")
     suspend fun countSeeded(): Int
 }
