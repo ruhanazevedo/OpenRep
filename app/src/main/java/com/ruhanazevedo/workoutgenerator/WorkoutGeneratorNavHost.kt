@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
@@ -29,6 +31,7 @@ import com.ruhanazevedo.workoutgenerator.ui.screens.LibraryScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.PlanDetailScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SessionScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SettingsScreen
+import com.ruhanazevedo.workoutgenerator.ui.viewmodel.GenerationSharedViewModel
 
 @Composable
 fun WorkoutGeneratorNavHost() {
@@ -38,6 +41,9 @@ fun WorkoutGeneratorNavHost() {
 
     val topLevelRoutes = bottomNavItems.map { it.screen.route }
     val showBottomBar = currentDestination?.route in topLevelRoutes
+
+    // Shared ViewModel scoped to the NavHost — survives GenerateFilter → GeneratedPlan transition
+    val sharedViewModel: GenerationSharedViewModel = hiltViewModel()
 
     Scaffold(
         bottomBar = {
@@ -122,15 +128,28 @@ fun WorkoutGeneratorNavHost() {
 
             composable(Screen.GenerateFilter.route) {
                 GenerateFilterScreen(
-                    onGenerate = { navController.navigate(Screen.GeneratedPlan.route) },
+                    onGenerate = { input ->
+                        sharedViewModel.setInput(input)
+                        navController.navigate(Screen.GeneratedPlan.route)
+                    },
                     onBack = { navController.popBackStack() }
                 )
             }
 
             composable(Screen.GeneratedPlan.route) {
+                val input by sharedViewModel.input.collectAsStateWithLifecycle()
                 GeneratedPlanScreen(
-                    onSave = { navController.popBackStack(Screen.History.route, false) },
-                    onBack = { navController.popBackStack() }
+                    input = input,
+                    onSave = { planId ->
+                        // Pop GenerateFilter + GeneratedPlan off the stack, then go to PlanDetail
+                        navController.navigate(Screen.PlanDetail.createRoute(planId)) {
+                            popUpTo(Screen.Generate.route) { inclusive = false }
+                        }
+                    },
+                    onBack = { navController.popBackStack() },
+                    onExerciseDetail = { id ->
+                        navController.navigate(Screen.ExerciseDetail.createRoute(id))
+                    }
                 )
             }
 
@@ -142,7 +161,10 @@ fun WorkoutGeneratorNavHost() {
                 PlanDetailScreen(
                     planId = planId,
                     onStartWorkout = { navController.navigate(Screen.Session.createRoute(planId)) },
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onExerciseDetail = { id ->
+                        navController.navigate(Screen.ExerciseDetail.createRoute(id))
+                    }
                 )
             }
 
