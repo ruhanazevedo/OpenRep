@@ -20,9 +20,9 @@ class WorkoutGeneratorEngine @Inject constructor(
     private val preferencesRepository: PreferencesRepository
 ) {
 
-    private val pushMuscles = setOf(MuscleGroup.CHEST, MuscleGroup.SHOULDERS, MuscleGroup.TRICEPS)
-    private val pullMuscles = setOf(MuscleGroup.BACK, MuscleGroup.BICEPS)
-    private val legMuscles = setOf(MuscleGroup.QUADS, MuscleGroup.HAMSTRINGS, MuscleGroup.GLUTES, MuscleGroup.CALVES)
+    private val pushMuscles = setOf(MuscleGroup.CHEST, MuscleGroup.SHOULDERS, MuscleGroup.TRICEPS, MuscleGroup.FULL_BODY)
+    private val pullMuscles = setOf(MuscleGroup.BACK, MuscleGroup.BICEPS, MuscleGroup.FULL_BODY)
+    private val legMuscles = setOf(MuscleGroup.QUADS, MuscleGroup.HAMSTRINGS, MuscleGroup.GLUTES, MuscleGroup.CALVES, MuscleGroup.FULL_BODY)
 
     suspend fun generate(input: GenerationInput): GeneratedPlan {
         val prefs = preferencesRepository.preferences.first()
