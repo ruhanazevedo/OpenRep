@@ -49,7 +49,7 @@ class PlanDetailViewModel @Inject constructor(
             } else {
                 flow {
                     val details = planWithExercises.exercises.associate { ex ->
-                        val entity = exerciseDao.getById(ex.exerciseId).first()
+                        val entity = exerciseDao.getById(ex.exerciseId).firstOrNull()
                         ex.id to PlanExerciseDisplay(
                             entity = ex,
                             exerciseName = entity?.name ?: "Unknown",
