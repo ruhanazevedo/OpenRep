@@ -52,6 +52,9 @@ class GeneratedPlanViewModel @Inject constructor(
     private val _swapSheet = MutableStateFlow(SwapSheetState())
     val swapSheet: StateFlow<SwapSheetState> = _swapSheet
 
+    private val _isSaving = MutableStateFlow(false)
+    val isSaving: StateFlow<Boolean> = _isSaving
+
     private var lastInput: GenerationInput? = null
     private var savedPlanId: String? = null
 
@@ -128,9 +131,11 @@ class GeneratedPlanViewModel @Inject constructor(
     }
 
     fun savePlan(onSaved: (String) -> Unit) {
+        if (_isSaving.value) return
         val state = _uiState.value as? GeneratedPlanUiState.Success ?: return
         val plan = state.plan
         viewModelScope.launch {
+            _isSaving.value = true
             val planId = UUID.randomUUID().toString()
             val planName = "${plan.splitType.label} — ${plan.daysPerWeek} days"
             val entity = WorkoutPlanEntity(
@@ -160,6 +165,8 @@ class GeneratedPlanViewModel @Inject constructor(
             }
             workoutPlanExerciseDao.insertAll(exercises)
             savedPlanId = planId
+            _uiState.value = GeneratedPlanUiState.Saved
+            _isSaving.value = false
             onSaved(planId)
         }
     }

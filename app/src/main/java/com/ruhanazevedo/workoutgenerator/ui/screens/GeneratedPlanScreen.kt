@@ -50,16 +50,18 @@ import com.ruhanazevedo.workoutgenerator.ui.viewmodel.GeneratedPlanViewModel
 @Composable
 fun GeneratedPlanScreen(
     input: GenerationInput? = null,
+    generationTrigger: Int = 0,
     onSave: (String) -> Unit = {},
     onBack: () -> Unit = {},
     onExerciseDetail: (String) -> Unit = {},
     viewModel: GeneratedPlanViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val isSaving by viewModel.isSaving.collectAsStateWithLifecycle()
     val swapSheet by viewModel.swapSheet.collectAsStateWithLifecycle()
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    LaunchedEffect(input) {
+    LaunchedEffect(generationTrigger) {
         if (input != null) viewModel.generate(input)
     }
 
@@ -153,11 +155,12 @@ fun GeneratedPlanScreen(
                         item {
                             Button(
                                 onClick = { viewModel.savePlan(onSave) },
+                                enabled = !isSaving,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(vertical = 8.dp)
                             ) {
-                                Text("Save Plan")
+                                Text(if (isSaving) "Saving…" else "Save Plan")
                             }
                         }
                     }
