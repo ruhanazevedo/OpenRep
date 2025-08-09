@@ -23,5 +23,14 @@ data class UserPreferencesEntity(
     val maxDifficulty: String = "Advanced",
 
     @ColumnInfo(name = "exercises_per_muscle_group")
-    val exercisesPerMuscleGroup: Int = 3
+    val exercisesPerMuscleGroup: Int = 3,
+
+    @ColumnInfo(name = "last_days_per_week")
+    val lastDaysPerWeek: Int = 3,
+
+    @ColumnInfo(name = "last_split_type")
+    val lastSplitType: String = "A",
+
+    @ColumnInfo(name = "last_selected_muscles")
+    val lastSelectedMuscles: List<String> = emptyList()
 )

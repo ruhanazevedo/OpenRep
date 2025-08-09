@@ -3,6 +3,8 @@ package com.ruhanazevedo.workoutgenerator.data.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.Migration
+import androidx.sqlite.db.SupportSQLiteDatabase
 import com.ruhanazevedo.workoutgenerator.data.db.converter.Converters
 import com.ruhanazevedo.workoutgenerator.data.db.dao.ExerciseDao
 import com.ruhanazevedo.workoutgenerator.data.db.dao.SessionSetDao
@@ -26,7 +28,7 @@ import com.ruhanazevedo.workoutgenerator.data.db.entity.WorkoutSessionEntity
         SessionSetEntity::class,
         UserPreferencesEntity::class,
     ],
-    version = 1,
+    version = 2,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -37,4 +39,14 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutSessionDao(): WorkoutSessionDao
     abstract fun sessionSetDao(): SessionSetDao
     abstract fun userPreferencesDao(): UserPreferencesDao
+
+    companion object {
+        val MIGRATION_1_2 = object : Migration(1, 2) {
+            override fun migrate(db: SupportSQLiteDatabase) {
+                db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_days_per_week INTEGER NOT NULL DEFAULT 3")
+                db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_split_type TEXT NOT NULL DEFAULT 'A'")
+                db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_selected_muscles TEXT NOT NULL DEFAULT ''")
+            }
+        }
+    }
 }

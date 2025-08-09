@@ -33,6 +33,9 @@ class GenerateFilterViewModel @Inject constructor(
         viewModelScope.launch {
             val prefs = preferencesRepository.preferences.first()
             _uiState.value = _uiState.value.copy(
+                daysPerWeek = prefs.lastDaysPerWeek,
+                selectedMuscleGroups = prefs.lastSelectedMuscles.toSet(),
+                splitType = SplitType.entries.firstOrNull { it.name == prefs.lastSplitType } ?: SplitType.A,
                 exercisesPerMuscle = prefs.exercisesPerMuscleGroup,
                 isLoaded = true
             )
@@ -65,6 +68,16 @@ class GenerateFilterViewModel @Inject constructor(
 
     fun buildGenerationInput(): GenerationInput {
         val state = _uiState.value
+        viewModelScope.launch {
+            val prefs = preferencesRepository.preferences.first()
+            preferencesRepository.update(
+                prefs.copy(
+                    lastDaysPerWeek = state.daysPerWeek,
+                    lastSplitType = state.splitType.name,
+                    lastSelectedMuscles = state.selectedMuscleGroups.toList()
+                )
+            )
+        }
         return GenerationInput(
             daysPerWeek = state.daysPerWeek,
             muscleGroups = state.selectedMuscleGroups.toList(),

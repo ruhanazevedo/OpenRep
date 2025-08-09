@@ -28,6 +28,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "workout_generator.db"
         )
+            .addMigrations(AppDatabase.MIGRATION_1_2)
             .build()
     }
 
