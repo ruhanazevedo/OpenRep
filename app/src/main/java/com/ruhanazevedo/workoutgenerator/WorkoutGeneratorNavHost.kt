@@ -138,8 +138,10 @@ fun WorkoutGeneratorNavHost() {
 
             composable(Screen.GeneratedPlan.route) {
                 val input by sharedViewModel.input.collectAsStateWithLifecycle()
+                val generationTrigger by sharedViewModel.generationTrigger.collectAsStateWithLifecycle()
                 GeneratedPlanScreen(
                     input = input,
+                    generationTrigger = generationTrigger,
                     onSave = { planId ->
                         // Pop GenerateFilter + GeneratedPlan off the stack, then go to PlanDetail
                         navController.navigate(Screen.PlanDetail.createRoute(planId)) {
