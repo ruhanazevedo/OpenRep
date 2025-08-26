@@ -29,6 +29,8 @@ import com.ruhanazevedo.workoutgenerator.ui.screens.GeneratedPlanScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.HistoryScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.LibraryScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.PlanDetailScreen
+import com.ruhanazevedo.workoutgenerator.ui.screens.SearchYouTubeScreen
+import com.ruhanazevedo.workoutgenerator.ui.screens.SessionDetailScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SessionScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SettingsScreen
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.GenerationSharedViewModel
@@ -94,8 +96,11 @@ fun WorkoutGeneratorNavHost() {
             }
             composable(Screen.History.route) {
                 HistoryScreen(
-                    onSessionClick = { id ->
+                    onPlanClick = { id ->
                         navController.navigate(Screen.PlanDetail.createRoute(id))
+                    },
+                    onSessionDetailClick = { id ->
+                        navController.navigate(Screen.SessionDetail.createRoute(id))
                     }
                 )
             }
@@ -111,7 +116,8 @@ fun WorkoutGeneratorNavHost() {
                 ExerciseDetailScreen(
                     exerciseId = backStackEntry.arguments?.getString("exerciseId") ?: "",
                     onBack = { navController.popBackStack() },
-                    onEdit = { id -> navController.navigate(Screen.EditExercise.createRoute(id)) }
+                    onEdit = { id -> navController.navigate(Screen.EditExercise.createRoute(id)) },
+                    onSearchYouTube = { id -> navController.navigate(Screen.SearchYouTube.createRoute(id)) }
                 )
             }
 
@@ -179,6 +185,20 @@ fun WorkoutGeneratorNavHost() {
                     onFinish = { navController.popBackStack(Screen.History.route, false) },
                     onBack = { navController.popBackStack() }
                 )
+            }
+
+            composable(
+                route = Screen.SearchYouTube.route,
+                arguments = listOf(navArgument("exerciseId") { type = NavType.StringType })
+            ) {
+                SearchYouTubeScreen(onBack = { navController.popBackStack() })
+            }
+
+            composable(
+                route = Screen.SessionDetail.route,
+                arguments = listOf(navArgument("sessionId") { type = NavType.StringType })
+            ) {
+                SessionDetailScreen(onBack = { navController.popBackStack() })
             }
         }
     }

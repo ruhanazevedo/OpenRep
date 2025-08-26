@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -45,6 +46,7 @@ fun ExerciseDetailScreen(
     exerciseId: String,
     onBack: () -> Unit = {},
     onEdit: (String) -> Unit = {},
+    onSearchYouTube: (String) -> Unit = {},
     viewModel: ExerciseDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -108,6 +110,9 @@ fun ExerciseDetailScreen(
                     }
                 },
                 actions = {
+                    IconButton(onClick = { onSearchYouTube(exercise.id) }) {
+                        Icon(Icons.Default.VideoLibrary, contentDescription = "Link video")
+                    }
                     if (exercise.isCustom) {
                         IconButton(onClick = { onEdit(exercise.id) }) {
                             Icon(Icons.Default.Edit, contentDescription = "Edit")
