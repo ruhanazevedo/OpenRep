@@ -12,6 +12,9 @@ interface WorkoutPlanExerciseDao {
     @Query("SELECT * FROM workout_plan_exercises WHERE plan_id = :planId ORDER BY day_index, order_index")
     fun getByPlanId(planId: String): Flow<List<WorkoutPlanExerciseEntity>>
 
+    @Query("SELECT * FROM workout_plan_exercises WHERE id = :id LIMIT 1")
+    suspend fun getById(id: String): WorkoutPlanExerciseEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(exercises: List<WorkoutPlanExerciseEntity>)
 

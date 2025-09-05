@@ -20,4 +20,7 @@ interface SessionSetDao {
 
     @Query("DELETE FROM session_sets WHERE session_id = :sessionId")
     suspend fun deleteBySessionId(sessionId: String)
+
+    @Query("SELECT COUNT(*) FROM session_sets WHERE session_id = :sessionId")
+    suspend fun countBySessionId(sessionId: String): Int
 }
