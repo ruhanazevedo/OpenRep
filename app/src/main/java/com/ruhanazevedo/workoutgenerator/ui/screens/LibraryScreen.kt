@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.AlertDialog
@@ -47,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ruhanazevedo.workoutgenerator.domain.model.Exercise
 import com.ruhanazevedo.workoutgenerator.domain.model.MuscleGroup
+import com.ruhanazevedo.workoutgenerator.ui.components.ShimmerList
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.ImportDuplicatePrompt
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.LibraryViewModel
 
@@ -146,14 +148,28 @@ fun LibraryScreen(
                 }
             }
 
-            if (!uiState.isLoading && uiState.exercises.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No exercises found", style = MaterialTheme.typography.bodyLarge)
+            when {
+                uiState.isLoading -> ShimmerList()
+                uiState.exercises.isEmpty() -> {
+                    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Icon(Icons.Default.FitnessCenter, contentDescription = null)
+                            Text("No exercises found", style = MaterialTheme.typography.bodyLarge)
+                        }
+                    }
                 }
-            } else {
-                LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    items(uiState.exercises, key = { it.id }) { exercise ->
-                        ExerciseListItem(exercise = exercise, onClick = { onExerciseClick(exercise.id) })
+                else -> {
+                    LazyColumn(modifier = Modifier.fillMaxSize()) {
+                        items(uiState.exercises, key = { it.id }) { exercise ->
+                            ExerciseListItem(
+                                exercise = exercise,
+                                onClick = { onExerciseClick(exercise.id) },
+                                modifier = Modifier.animateItem()
+                            )
+                        }
                     }
                 }
             }
@@ -162,9 +178,9 @@ fun LibraryScreen(
 }
 
 @Composable
-private fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit) {
+private fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit, modifier: Modifier = Modifier) {
     Card(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = onClick),

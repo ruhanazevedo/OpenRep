@@ -74,21 +74,17 @@ class SearchYouTubeViewModel @Inject constructor(
     fun confirmPasteInput() {
         val raw = _uiState.value.pasteInput.trim()
         if (raw.isBlank()) return
-        val id = extractYouTubeId(raw) ?: return
+        val id = parseYouTubeId(raw) ?: return
         confirmVideoId(id)
     }
 }
 
-fun extractYouTubeId(input: String): String? {
-    // Already an 11-char video ID
+private fun parseYouTubeId(input: String): String? {
     if (input.matches(Regex("[a-zA-Z0-9_-]{11}"))) return input
-    // youtu.be/VIDEO_ID
     val shortUrl = Regex("youtu\\.be/([a-zA-Z0-9_-]{11})").find(input)
     if (shortUrl != null) return shortUrl.groupValues[1]
-    // youtube.com/watch?v=VIDEO_ID
     val longUrl = Regex("[?&]v=([a-zA-Z0-9_-]{11})").find(input)
     if (longUrl != null) return longUrl.groupValues[1]
-    // youtube.com/embed/VIDEO_ID
     val embed = Regex("embed/([a-zA-Z0-9_-]{11})").find(input)
     if (embed != null) return embed.groupValues[1]
     return null

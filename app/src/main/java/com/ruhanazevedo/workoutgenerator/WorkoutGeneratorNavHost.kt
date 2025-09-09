@@ -1,6 +1,10 @@
 package com.ruhanazevedo.workoutgenerator
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,6 +38,7 @@ import com.ruhanazevedo.workoutgenerator.ui.screens.SessionDetailScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SessionScreen
 import com.ruhanazevedo.workoutgenerator.ui.screens.SettingsScreen
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.GenerationSharedViewModel
+import com.ruhanazevedo.workoutgenerator.ui.viewmodel.HistoryViewModel
 
 @Composable
 fun WorkoutGeneratorNavHost() {
@@ -46,14 +51,27 @@ fun WorkoutGeneratorNavHost() {
 
     // Shared ViewModel scoped to the NavHost — survives GenerateFilter → GeneratedPlan transition
     val sharedViewModel: GenerationSharedViewModel = hiltViewModel()
+    // History ViewModel for badge count
+    val historyViewModel: HistoryViewModel = hiltViewModel()
+    val historyUiState by historyViewModel.uiState.collectAsStateWithLifecycle()
+    val savedPlanCount = historyUiState.plans.size
 
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
                 NavigationBar {
                     bottomNavItems.forEach { item ->
+                        val isHistory = item.screen == Screen.History
                         NavigationBarItem(
-                            icon = { Icon(item.icon, contentDescription = item.label) },
+                            icon = {
+                                if (isHistory && savedPlanCount > 0) {
+                                    BadgedBox(badge = { Badge { Text(savedPlanCount.toString()) } }) {
+                                        Icon(item.icon, contentDescription = item.label)
+                                    }
+                                } else {
+                                    Icon(item.icon, contentDescription = item.label)
+                                }
+                            },
                             label = { Text(item.label) },
                             selected = currentDestination?.hierarchy?.any { it.route == item.screen.route } == true,
                             onClick = {
@@ -74,7 +92,11 @@ fun WorkoutGeneratorNavHost() {
         NavHost(
             navController = navController,
             startDestination = Screen.Library.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
+            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 3 }) },
+            popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 3 }) },
+            popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
         ) {
             // Bottom nav top-level destinations
             composable(Screen.Library.route) {

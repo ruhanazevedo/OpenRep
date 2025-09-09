@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -29,6 +30,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.size
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ruhanazevedo.workoutgenerator.data.db.entity.WorkoutPlanEntity
@@ -82,7 +84,7 @@ fun HistoryScreen(
 private fun PlansTab(plans: List<WorkoutPlanEntity>, onPlanClick: (String) -> Unit) {
     if (plans.isEmpty()) {
         EmptyState(
-            icon = { Icon(Icons.Default.History, contentDescription = null) },
+            icon = { Icon(Icons.Default.FitnessCenter, contentDescription = null, modifier = Modifier.fillMaxSize()) },
             message = "No saved plans yet",
             subMessage = "Generate one to get started"
         )
@@ -105,7 +107,7 @@ private fun PlansTab(plans: List<WorkoutPlanEntity>, onPlanClick: (String) -> Un
 private fun SessionsTab(sessions: List<SessionSummary>, onSessionClick: (String) -> Unit) {
     if (sessions.isEmpty()) {
         EmptyState(
-            icon = { Icon(Icons.Default.History, contentDescription = null) },
+            icon = { Icon(Icons.Default.History, contentDescription = null, modifier = Modifier.fillMaxSize()) },
             message = "No completed sessions yet",
             subMessage = "Start a workout to log your first session"
         )
@@ -131,7 +133,7 @@ private fun EmptyState(icon: @Composable () -> Unit, message: String, subMessage
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            icon()
+            Box(modifier = Modifier.size(64.dp)) { icon() }
             Text(message, style = MaterialTheme.typography.titleMedium)
             Text(
                 subMessage,
