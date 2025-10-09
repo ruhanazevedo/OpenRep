@@ -184,6 +184,7 @@ class SessionViewModel @Inject constructor(
 
     fun finishWorkout() {
         val state = _uiState.value
+        if (state.isLoading || state.sessionId.isBlank()) return
         restTimerJob?.cancel()
         viewModelScope.launch {
             val existing = workoutSessionDao.getById(state.sessionId).firstOrNull() ?: return@launch
