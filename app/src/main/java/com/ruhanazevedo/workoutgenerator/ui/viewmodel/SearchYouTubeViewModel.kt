@@ -66,7 +66,6 @@ class SearchYouTubeViewModel @Inject constructor(
     fun confirmVideoId(videoId: String) {
         viewModelScope.launch {
             val exercise = exerciseRepository.getById(exerciseId).first() ?: return@launch
-            if (!exercise.isCustom) return@launch
             exerciseRepository.update(exercise.copy(youtubeVideoId = videoId))
             _uiState.value = _uiState.value.copy(confirmCompleted = true)
         }
