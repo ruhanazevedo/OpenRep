@@ -1,5 +1,6 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
+import android.view.MotionEvent
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
@@ -205,8 +206,18 @@ private fun YouTubeWebView(videoId: String) {
             WebView(context).apply {
                 webViewClient = WebViewClient()
                 settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
                 settings.loadWithOverviewMode = true
                 settings.useWideViewPort = true
+                setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
+                            v.parent.requestDisallowInterceptTouchEvent(true)
+                        MotionEvent.ACTION_UP ->
+                            v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                    false
+                }
             }
         },
         update = { webView ->
