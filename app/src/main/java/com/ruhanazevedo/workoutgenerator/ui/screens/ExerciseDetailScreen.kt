@@ -1,6 +1,9 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
 import android.view.MotionEvent
+import android.view.View
+import android.webkit.PermissionRequest
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Column
@@ -189,22 +192,20 @@ private fun DetailLabel(label: String) {
 
 @Composable
 private fun YouTubeWebView(videoId: String) {
-    val html = """
-        <html>
-        <body style="margin:0;padding:0;background:#000;">
-        <iframe width="100%" height="100%"
-            src="https://www.youtube.com/embed/$videoId?autoplay=0"
-            frameborder="0"
-            allowfullscreen>
-        </iframe>
-        </body>
-        </html>
-    """.trimIndent()
-
     AndroidView(
         factory = { context ->
             WebView(context).apply {
-                webViewClient = WebViewClient()
+                visibility = View.INVISIBLE
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        view?.visibility = View.VISIBLE
+                    }
+                }
+                webChromeClient = object : WebChromeClient() {
+                    override fun onPermissionRequest(request: PermissionRequest) {
+                        request.grant(request.resources)
+                    }
+                }
                 settings.javaScriptEnabled = true
                 settings.domStorageEnabled = true
                 settings.loadWithOverviewMode = true
@@ -218,10 +219,8 @@ private fun YouTubeWebView(videoId: String) {
                     }
                     false
                 }
+                loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1")
             }
-        },
-        update = { webView ->
-            webView.loadDataWithBaseURL("https://www.youtube.com", html, "text/html", "utf-8", null)
         },
         modifier = Modifier
             .fillMaxWidth()
