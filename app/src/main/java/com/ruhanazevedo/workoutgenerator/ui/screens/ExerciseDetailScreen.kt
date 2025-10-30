@@ -219,8 +219,10 @@ private fun YouTubeWebView(videoId: String) {
                     }
                     false
                 }
-                loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1")
             }
+        },
+        update = { webView ->
+            webView.loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1")
         },
         modifier = Modifier
             .fillMaxWidth()
