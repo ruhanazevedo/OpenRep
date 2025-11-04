@@ -1,11 +1,9 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
-import android.view.MotionEvent
-import android.view.View
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -192,41 +190,18 @@ private fun DetailLabel(label: String) {
 
 @Composable
 private fun YouTubeWebView(videoId: String) {
+    val lifecycleOwner = LocalLifecycleOwner.current
     AndroidView(
         factory = { context ->
-            WebView(context).apply {
-                visibility = View.INVISIBLE
-                webViewClient = object : WebViewClient() {
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        view?.visibility = View.VISIBLE
+            YouTubePlayerView(context).apply {
+                lifecycleOwner.lifecycle.addObserver(this)
+                addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        youTubePlayer.cueVideo(videoId, 0f)
                     }
-                }
-                webChromeClient = object : WebChromeClient() {
-                    override fun onPermissionRequest(request: PermissionRequest) {
-                        request.grant(request.resources)
-                    }
-                }
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
-                settings.loadWithOverviewMode = true
-                settings.useWideViewPort = true
-                settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-                setOnTouchListener { v, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
-                            v.parent.requestDisallowInterceptTouchEvent(true)
-                        MotionEvent.ACTION_UP ->
-                            v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                    false
-                }
+                })
             }
         },
-        update = { webView ->
-            webView.loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1")
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
+        modifier = Modifier.fillMaxWidth()
     )
 }
