@@ -173,11 +173,10 @@ fun ExerciseDetailScreen(
                 }
             }
 
-            exercise.youtubeVideoId?.let { videoId ->
-                Spacer(Modifier.height(16.dp))
-                DetailLabel("Video")
-                YouTubeWebView(videoId = videoId)
-            }
+            val videoId = exercise.youtubeVideoId ?: "9ZCoAbI7uX0"
+            Spacer(Modifier.height(16.dp))
+            DetailLabel("Video")
+            YouTubeWebView(videoId = videoId)
         }
     }
 }
@@ -197,7 +196,7 @@ private fun YouTubeWebView(videoId: String) {
                 lifecycleOwner.lifecycle.addObserver(this)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
-                        youTubePlayer.cueVideo(videoId, 0f)
+                        youTubePlayer.loadVideo(videoId, 0f)
                     }
                 })
             }
