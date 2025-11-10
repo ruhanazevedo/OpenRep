@@ -173,7 +173,7 @@ fun ExerciseDetailScreen(
                 }
             }
 
-            val videoId = exercise.youtubeVideoId ?: "9ZCoAbI7uX0"
+            val videoId = exercise.youtubeVideoId ?: "dQw4w9WgXcQ"
             Spacer(Modifier.height(16.dp))
             DetailLabel("Video")
             YouTubeWebView(videoId = videoId)
