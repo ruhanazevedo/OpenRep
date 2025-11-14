@@ -1,5 +1,6 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
+import android.util.Log
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -196,6 +197,7 @@ private fun YouTubeWebView(videoId: String) {
                 lifecycleOwner.lifecycle.addObserver(this)
                 addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
                     override fun onReady(youTubePlayer: YouTubePlayer) {
+                        Log.d("YouTubeDebug", "onReady — videoId='$videoId' len=${videoId.length}")
                         youTubePlayer.loadVideo(videoId, 0f)
                     }
                 })
