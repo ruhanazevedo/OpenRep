@@ -96,7 +96,6 @@ dependencies {
     implementation(libs.moshi.kotlin)
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.okhttp.logging)
-    implementation(libs.android.youtube.player)
 
     // Testing
     testImplementation(libs.junit)

@@ -1,10 +1,9 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
-import android.util.Log
-import androidx.lifecycle.compose.LocalLifecycleOwner
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -38,9 +37,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.ExerciseDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -190,19 +191,28 @@ private fun DetailLabel(label: String) {
 
 @Composable
 private fun YouTubeWebView(videoId: String) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    AndroidView(
-        factory = { context ->
-            YouTubePlayerView(context).apply {
-                lifecycleOwner.lifecycle.addObserver(this)
-                addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                    override fun onReady(youTubePlayer: YouTubePlayer) {
-                        Log.d("YouTubeDebug", "onReady — videoId='$videoId' len=${videoId.length}")
-                        youTubePlayer.loadVideo(videoId, 0f)
-                    }
-                })
+    val context = LocalContext.current
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/$videoId"))
+                context.startActivity(intent)
             }
-        },
-        modifier = Modifier.fillMaxWidth()
-    )
+    ) {
+        AsyncImage(
+            model = "https://img.youtube.com/vi/$videoId/hqdefault.jpg",
+            contentDescription = "Video thumbnail",
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(220.dp)
+        )
+        Icon(
+            imageVector = Icons.Default.VideoLibrary,
+            contentDescription = "Play video",
+            modifier = Modifier.align(Alignment.Center),
+            tint = androidx.compose.ui.graphics.Color.White
+        )
+    }
 }
