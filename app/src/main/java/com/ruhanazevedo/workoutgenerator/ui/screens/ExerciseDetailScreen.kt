@@ -1,7 +1,7 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
-import android.content.Intent
 import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -196,8 +196,10 @@ private fun YouTubeWebView(videoId: String) {
         modifier = Modifier
             .fillMaxWidth()
             .clickable {
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/$videoId"))
-                context.startActivity(intent)
+                CustomTabsIntent.Builder()
+                    .setShowTitle(false)
+                    .build()
+                    .launchUrl(context, Uri.parse("https://youtu.be/$videoId"))
             }
     ) {
         AsyncImage(
