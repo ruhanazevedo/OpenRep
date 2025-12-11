@@ -1,8 +1,11 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
-import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
-import androidx.compose.foundation.clickable
+import android.view.MotionEvent
+import android.view.View
+import android.webkit.PermissionRequest
+import android.webkit.WebChromeClient
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -37,11 +40,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.ExerciseDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -192,30 +193,67 @@ private fun DetailLabel(label: String) {
 
 @Composable
 private fun YouTubeWebView(videoId: String) {
-    val context = LocalContext.current
-    Box(
+    val html = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>* { margin:0; padding:0; } body { background:#000; } #player { width:100%; height:100%; }</style>
+        </head>
+        <body>
+        <div id="player"></div>
+        <script>
+        var tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+        function onYouTubeIframeAPIReady() {
+          new YT.Player('player', {
+            width: '100%', height: '100%',
+            videoId: '$videoId',
+            playerVars: { playsinline: 1, rel: 0, modestbranding: 1 }
+          });
+        }
+        </script>
+        </body>
+        </html>
+    """.trimIndent()
+
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                visibility = View.INVISIBLE
+                webViewClient = object : WebViewClient() {
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        view?.visibility = View.VISIBLE
+                    }
+                }
+                webChromeClient = object : WebChromeClient() {
+                    override fun onPermissionRequest(request: PermissionRequest) {
+                        request.grant(request.resources)
+                    }
+                }
+                settings.javaScriptEnabled = true
+                settings.domStorageEnabled = true
+                settings.mediaPlaybackRequiresUserGesture = false
+                settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                setOnTouchListener { v, event ->
+                    when (event.action) {
+                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
+                            v.parent.requestDisallowInterceptTouchEvent(true)
+                        MotionEvent.ACTION_UP ->
+                            v.parent.requestDisallowInterceptTouchEvent(false)
+                    }
+                    false
+                }
+            }
+        },
+        update = { webView ->
+            webView.loadDataWithBaseURL(
+                "https://www.youtube.com", html, "text/html", "utf-8", null
+            )
+        },
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
-                CustomTabsIntent.Builder()
-                    .setShowTitle(false)
-                    .build()
-                    .launchUrl(context, Uri.parse("https://youtu.be/$videoId"))
-            }
-    ) {
-        AsyncImage(
-            model = "https://img.youtube.com/vi/$videoId/hqdefault.jpg",
-            contentDescription = "Video thumbnail",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-        )
-        Icon(
-            imageVector = Icons.Default.VideoLibrary,
-            contentDescription = "Play video",
-            modifier = Modifier.align(Alignment.Center),
-            tint = androidx.compose.ui.graphics.Color.White
-        )
-    }
+            .height(220.dp)
+    )
 }
