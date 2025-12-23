@@ -176,10 +176,11 @@ fun ExerciseDetailScreen(
                 }
             }
 
-            val videoId = exercise.youtubeVideoId ?: "2pLT-olgUJs"
-            Spacer(Modifier.height(16.dp))
-            DetailLabel("Video")
-            YouTubeWebView(videoId = videoId)
+            exercise.youtubeVideoId?.let { videoId ->
+                Spacer(Modifier.height(16.dp))
+                DetailLabel("Video")
+                YouTubeWebView(videoId = videoId)
+            }
         }
     }
 }
