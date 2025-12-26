@@ -193,31 +193,6 @@ private fun DetailLabel(label: String) {
 
 @Composable
 private fun YouTubeWebView(videoId: String) {
-    val html = """
-        <!DOCTYPE html>
-        <html>
-        <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style>* { margin:0; padding:0; } body { background:#000; } #player { width:100%; height:100%; }</style>
-        </head>
-        <body>
-        <div id="player"></div>
-        <script>
-        var tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        document.head.appendChild(tag);
-        function onYouTubeIframeAPIReady() {
-          new YT.Player('player', {
-            width: '100%', height: '100%',
-            videoId: '$videoId',
-            playerVars: { playsinline: 1, rel: 0, modestbranding: 1 }
-          });
-        }
-        </script>
-        </body>
-        </html>
-    """.trimIndent()
-
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -248,9 +223,7 @@ private fun YouTubeWebView(videoId: String) {
             }
         },
         update = { webView ->
-            webView.loadDataWithBaseURL(
-                "https://www.youtube.com", html, "text/html", "utf-8", null
-            )
+            webView.loadUrl("https://m.youtube.com/watch?v=$videoId")
         },
         modifier = Modifier
             .fillMaxWidth()
