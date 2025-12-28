@@ -2,6 +2,7 @@ package com.ruhanazevedo.workoutgenerator.ui.screens
 
 import android.view.MotionEvent
 import android.view.View
+import android.webkit.CookieManager
 import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
@@ -202,9 +203,7 @@ private fun YouTubeWebView(videoId: String) {
                         view?.visibility = View.VISIBLE
                     }
                     override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                        if (url != null && (url.contains("youtube.com/embed") || url.contains("youtube.com/watch"))) {
-                            return false
-                        }
+                        if (url != null && url.contains("youtube.com")) return false
                         return true
                     }
                 }
@@ -217,6 +216,8 @@ private fun YouTubeWebView(videoId: String) {
                 settings.domStorageEnabled = true
                 settings.mediaPlaybackRequiresUserGesture = false
                 settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+                CookieManager.getInstance().setAcceptCookie(true)
+                CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
                 setOnTouchListener { v, event ->
                     when (event.action) {
                         MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
