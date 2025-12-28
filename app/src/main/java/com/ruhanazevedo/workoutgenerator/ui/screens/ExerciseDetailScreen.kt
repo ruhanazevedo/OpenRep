@@ -201,6 +201,12 @@ private fun YouTubeWebView(videoId: String) {
                     override fun onPageFinished(view: WebView?, url: String?) {
                         view?.visibility = View.VISIBLE
                     }
+                    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                        if (url != null && (url.contains("youtube.com/embed") || url.contains("youtube.com/watch"))) {
+                            return false
+                        }
+                        return true
+                    }
                 }
                 webChromeClient = object : WebChromeClient() {
                     override fun onPermissionRequest(request: PermissionRequest) {
@@ -223,7 +229,7 @@ private fun YouTubeWebView(videoId: String) {
             }
         },
         update = { webView ->
-            webView.loadUrl("https://m.youtube.com/watch?v=$videoId")
+            webView.loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1&rel=0")
         },
         modifier = Modifier
             .fillMaxWidth()
