@@ -3,13 +3,16 @@ package com.ruhanazevedo.workoutgenerator.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ruhanazevedo.workoutgenerator.data.remote.WgerApiService
 import com.ruhanazevedo.workoutgenerator.data.repository.ExerciseRepository
 import com.ruhanazevedo.workoutgenerator.domain.model.Exercise
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 data class ExerciseDetailUiState(
@@ -22,6 +25,7 @@ data class ExerciseDetailUiState(
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
     private val repository: ExerciseRepository,
+    private val wgerApiService: WgerApiService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -30,10 +34,34 @@ class ExerciseDetailViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(ExerciseDetailUiState())
     val uiState: StateFlow<ExerciseDetailUiState> = _uiState
 
+    private val _exerciseImages = MutableStateFlow<List<String>>(emptyList())
+    val exerciseImages: StateFlow<List<String>> = _exerciseImages
+
     init {
         viewModelScope.launch {
             repository.getById(exerciseId).collectLatest { exercise ->
                 _uiState.value = _uiState.value.copy(exercise = exercise, isLoading = false)
+                if (exercise != null) {
+                    fetchExerciseImages(exercise.name)
+                }
+            }
+        }
+    }
+
+    private fun fetchExerciseImages(name: String) {
+        viewModelScope.launch {
+            try {
+                val baseId = withContext(Dispatchers.IO) {
+                    val response = wgerApiService.searchExercise(term = name)
+                    response.suggestions.firstOrNull()?.data?.baseId
+                } ?: return@launch
+
+                val images = withContext(Dispatchers.IO) {
+                    wgerApiService.getExerciseImages(exerciseBase = baseId).results.map { it.image }
+                }
+                _exerciseImages.value = images
+            } catch (_: Exception) {
+                _exerciseImages.value = emptyList()
             }
         }
     }

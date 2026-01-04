@@ -1,25 +1,28 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
-import android.view.MotionEvent
-import android.view.View
-import android.webkit.CookieManager
-import android.webkit.PermissionRequest
-import android.webkit.WebChromeClient
-import android.webkit.WebView
-import android.webkit.WebViewClient
+import android.net.Uri
+import androidx.browser.customtabs.CustomTabsIntent
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.VideoLibrary
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
@@ -41,9 +44,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.ruhanazevedo.workoutgenerator.ui.viewmodel.ExerciseDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +62,7 @@ fun ExerciseDetailScreen(
     viewModel: ExerciseDetailViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val exerciseImages by viewModel.exerciseImages.collectAsState()
 
     LaunchedEffect(uiState.deleteCompleted) {
         if (uiState.deleteCompleted) onBack()
@@ -177,10 +184,102 @@ fun ExerciseDetailScreen(
                 }
             }
 
-            exercise.youtubeVideoId?.let { videoId ->
+            val hasMedia = exerciseImages.isNotEmpty() || exercise.youtubeVideoId != null
+            if (hasMedia) {
                 Spacer(Modifier.height(16.dp))
-                DetailLabel("Video")
-                YouTubeWebView(videoId = videoId)
+                DetailLabel("Media")
+                MediaCarousel(
+                    images = exerciseImages,
+                    youtubeVideoId = exercise.youtubeVideoId
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun MediaCarousel(images: List<String>, youtubeVideoId: String?) {
+    val slides = buildList {
+        addAll(images)
+        if (youtubeVideoId != null) add(youtubeVideoId)
+    }
+    val imageCount = images.size
+    val totalCount = slides.size
+
+    if (totalCount == 0) return
+
+    val pagerState = rememberPagerState(pageCount = { totalCount })
+    val context = LocalContext.current
+
+    Column {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { page ->
+            if (page < imageCount) {
+                AsyncImage(
+                    model = slides[page],
+                    contentDescription = "Exercise image ${page + 1}",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .background(Color(0xFFE0E0E0))
+                )
+            } else {
+                val videoId = youtubeVideoId ?: return@HorizontalPager
+                val thumbnailUrl = "https://img.youtube.com/vi/$videoId/hqdefault.jpg"
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(220.dp)
+                        .background(Color.Black),
+                    contentAlignment = Alignment.Center
+                ) {
+                    AsyncImage(
+                        model = thumbnailUrl,
+                        contentDescription = "YouTube thumbnail",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(220.dp)
+                    )
+                    IconButton(
+                        onClick = {
+                            val intent = CustomTabsIntent.Builder().build()
+                            intent.launchUrl(context, Uri.parse("https://youtu.be/$videoId"))
+                        }
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.PlayCircle,
+                            contentDescription = "Play video",
+                            tint = Color.White,
+                            modifier = Modifier.size(56.dp)
+                        )
+                    }
+                }
+            }
+        }
+
+        if (totalCount > 1) {
+            Spacer(Modifier.height(8.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center
+            ) {
+                repeat(totalCount) { index ->
+                    val isSelected = pagerState.currentPage == index
+                    Box(
+                        modifier = Modifier
+                            .padding(horizontal = 3.dp)
+                            .size(if (isSelected) 8.dp else 6.dp)
+                            .background(
+                                color = if (isSelected) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                                shape = CircleShape
+                            )
+                    )
+                }
             }
         }
     }
@@ -190,50 +289,4 @@ fun ExerciseDetailScreen(
 private fun DetailLabel(label: String) {
     Text(label, style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
     Spacer(Modifier.height(4.dp))
-}
-
-@Composable
-private fun YouTubeWebView(videoId: String) {
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                visibility = View.INVISIBLE
-                webViewClient = object : WebViewClient() {
-                    override fun onPageFinished(view: WebView?, url: String?) {
-                        view?.visibility = View.VISIBLE
-                    }
-                    override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
-                        if (url != null && url.contains("youtube.com")) return false
-                        return true
-                    }
-                }
-                webChromeClient = object : WebChromeClient() {
-                    override fun onPermissionRequest(request: PermissionRequest) {
-                        request.grant(request.resources)
-                    }
-                }
-                settings.javaScriptEnabled = true
-                settings.domStorageEnabled = true
-                settings.mediaPlaybackRequiresUserGesture = false
-                settings.userAgentString = "Mozilla/5.0 (Linux; Android 10; Mobile) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
-                CookieManager.getInstance().setAcceptCookie(true)
-                CookieManager.getInstance().setAcceptThirdPartyCookies(this, true)
-                setOnTouchListener { v, event ->
-                    when (event.action) {
-                        MotionEvent.ACTION_DOWN, MotionEvent.ACTION_MOVE ->
-                            v.parent.requestDisallowInterceptTouchEvent(true)
-                        MotionEvent.ACTION_UP ->
-                            v.parent.requestDisallowInterceptTouchEvent(false)
-                    }
-                    false
-                }
-            }
-        },
-        update = { webView ->
-            webView.loadUrl("https://www.youtube.com/embed/$videoId?playsinline=1&rel=0")
-        },
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(220.dp)
-    )
 }
