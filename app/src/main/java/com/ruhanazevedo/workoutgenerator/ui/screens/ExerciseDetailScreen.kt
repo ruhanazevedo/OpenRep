@@ -1,7 +1,7 @@
 package com.ruhanazevedo.workoutgenerator.ui.screens
 
+import android.content.Intent
 import android.net.Uri
-import androidx.browser.customtabs.CustomTabsIntent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -246,8 +246,9 @@ private fun MediaCarousel(images: List<String>, youtubeVideoId: String?) {
                     )
                     IconButton(
                         onClick = {
-                            val intent = CustomTabsIntent.Builder().build()
-                            intent.launchUrl(context, Uri.parse("https://youtu.be/$videoId"))
+                            context.startActivity(
+                                Intent(Intent.ACTION_VIEW, Uri.parse("https://youtu.be/$videoId"))
+                            )
                         }
                     ) {
                         Icon(
