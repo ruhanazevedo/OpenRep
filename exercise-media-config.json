@@ -1,14 +1,642 @@
 {
   "exercises": {
-    "Bench Press": {
+    "Ab Wheel Rollout": {
       "images": [],
       "youtubeId": null
     },
-    "Squat": {
+    "Arnold Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Back Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Bench Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Clean": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Hip Thrust": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell JM Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Lunge": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Overhead Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Rollout": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Shrug": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Barbell Thruster": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Battle Ropes Alternating Waves": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Bear Crawl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Behind-the-Neck Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Bicycle Crunch": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Bodyweight Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Bodyweight Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Box Jump": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Bulgarian Split Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Burpee": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Crossover": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Crunch": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Front Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Hammer Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Kickback": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Lateral Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Overhead Tricep Extension": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Pallof Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Pull-Through": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Rear Delt Fly": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Straight Arm Pulldown": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Cable Tricep Pushdown": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Chest Dip": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Chin-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Close-Grip Bench Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Concentration Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Crunch": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dead Bug": {
       "images": [],
       "youtubeId": null
     },
     "Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Decline Barbell Bench Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Diamond Push-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Donkey Kick": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dragon Flag": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Bench Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Farmer Carry": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Flye": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Front Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Goblet Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Hamstring Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Hip Thrust": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Kickback": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Lateral Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Overhead Tricep Extension": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Pullover": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Rear Delt Fly": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Romanian Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Shoulder Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Shrug": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Side Bend": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Step-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Dumbbell Thruster": {
+      "images": [],
+      "youtubeId": null
+    },
+    "EZ-Bar Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Face Pull": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Fire Hydrant": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Front Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Glute Bridge": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Glute-Ham Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Good Morning": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Hack Machine Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Hack Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Hammer Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Handstand Push-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Hanging Leg Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Hollow Body Hold": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Incline Barbell Bench Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Incline Dumbbell Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Incline Dumbbell Fly": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Incline Dumbbell Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Inverted Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Jump Rope": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Jump Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Clean and Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Goblet Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Single-Arm Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Swing": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Tricep Extension": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Kettlebell Turkish Get-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Lat Pulldown": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Leg Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Leg Extension": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Leg Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Leg Press Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Low Cable Fly": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Chest Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Glute Kickback": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Preacher Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Pulldown": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Shoulder Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Machine Tricep Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Man Maker": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Medicine Ball Slam": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Mountain Climber": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Nordic Hamstring Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Pec Deck": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Pendlay Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Pike Push-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Plank": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Pull-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Push-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Chest Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Hip Thrust": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Leg Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Pull-Apart": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Pushdown": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Shoulder Press": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Total Body Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Resistance Band Tricep Extension": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Reverse Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Romanian Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Romanian Split Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Russian Twist": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Sandbag Carry": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Seated Cable Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Seated Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Seated Leg Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Side Plank": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Single-Leg Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Sissy Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Skull Crusher": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Sled Push": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Spider Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Standing Calf Raise": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Stiff-Leg Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Sumo Deadlift": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Sumo Squat": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Swiss Ball Leg Curl": {
+      "images": [],
+      "youtubeId": null
+    },
+    "T-Bar Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Tire Flip": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Tricep Dip": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Upright Row": {
+      "images": [],
+      "youtubeId": null
+    },
+    "V-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Walking Lunge": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Wide Push-Up": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Woodchop": {
+      "images": [],
+      "youtubeId": null
+    },
+    "Zottman Curl": {
       "images": [],
       "youtubeId": null
     }
