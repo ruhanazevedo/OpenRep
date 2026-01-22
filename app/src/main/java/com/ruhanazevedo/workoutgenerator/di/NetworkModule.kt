@@ -1,5 +1,6 @@
 package com.ruhanazevedo.workoutgenerator.di
 
+import com.ruhanazevedo.workoutgenerator.data.remote.RemoteMediaConfigService
 import com.ruhanazevedo.workoutgenerator.data.remote.WgerApiService
 import com.ruhanazevedo.workoutgenerator.data.remote.YouTubeApiService
 import com.squareup.moshi.Moshi
@@ -22,6 +23,10 @@ annotation class YouTubeRetrofit
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class WgerRetrofit
+
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class RawGitHubRetrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -70,4 +75,19 @@ object NetworkModule {
     @Singleton
     fun provideWgerApiService(@WgerRetrofit retrofit: Retrofit): WgerApiService =
         retrofit.create(WgerApiService::class.java)
+
+    @Provides
+    @Singleton
+    @RawGitHubRetrofit
+    fun provideRawGitHubRetrofit(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit =
+        Retrofit.Builder()
+            .baseUrl("https://raw.githubusercontent.com/")
+            .client(okHttpClient)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+
+    @Provides
+    @Singleton
+    fun provideRemoteMediaConfigService(@RawGitHubRetrofit retrofit: Retrofit): RemoteMediaConfigService =
+        retrofit.create(RemoteMediaConfigService::class.java)
 }

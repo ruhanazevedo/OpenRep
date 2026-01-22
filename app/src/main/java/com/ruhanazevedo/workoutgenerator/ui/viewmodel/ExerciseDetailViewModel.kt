@@ -3,6 +3,7 @@ package com.ruhanazevedo.workoutgenerator.ui.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.ruhanazevedo.workoutgenerator.data.remote.RemoteMediaConfigService
 import com.ruhanazevedo.workoutgenerator.data.remote.WgerApiService
 import com.ruhanazevedo.workoutgenerator.data.repository.ExerciseRepository
 import com.ruhanazevedo.workoutgenerator.domain.model.Exercise
@@ -26,6 +27,7 @@ data class ExerciseDetailUiState(
 class ExerciseDetailViewModel @Inject constructor(
     private val repository: ExerciseRepository,
     private val wgerApiService: WgerApiService,
+    private val remoteMediaConfigService: RemoteMediaConfigService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -37,12 +39,16 @@ class ExerciseDetailViewModel @Inject constructor(
     private val _exerciseImages = MutableStateFlow<List<String>>(emptyList())
     val exerciseImages: StateFlow<List<String>> = _exerciseImages
 
+    private val _remoteYoutubeId = MutableStateFlow<String?>(null)
+    val remoteYoutubeId: StateFlow<String?> = _remoteYoutubeId
+
     init {
         viewModelScope.launch {
             repository.getById(exerciseId).collectLatest { exercise ->
                 _uiState.value = _uiState.value.copy(exercise = exercise, isLoading = false)
                 if (exercise != null) {
                     fetchExerciseImages(exercise.name)
+                    fetchRemoteMediaConfig(exercise)
                 }
             }
         }
@@ -62,6 +68,29 @@ class ExerciseDetailViewModel @Inject constructor(
                 _exerciseImages.value = images
             } catch (_: Exception) {
                 _exerciseImages.value = emptyList()
+            }
+        }
+    }
+
+    private fun fetchRemoteMediaConfig(exercise: Exercise) {
+        viewModelScope.launch {
+            try {
+                val config = withContext(Dispatchers.IO) {
+                    remoteMediaConfigService.getMediaConfig()
+                }
+                val entry = config.exercises.entries
+                    .firstOrNull { it.key.equals(exercise.name, ignoreCase = true) }
+                    ?.value ?: return@launch
+
+                if (entry.images.isNotEmpty()) {
+                    _exerciseImages.value = entry.images + _exerciseImages.value
+                }
+
+                if (entry.youtubeId != null && exercise.youtubeVideoId == null) {
+                    _remoteYoutubeId.value = entry.youtubeId
+                }
+            } catch (_: Exception) {
+                // silent — continue with Wger-only data
             }
         }
     }

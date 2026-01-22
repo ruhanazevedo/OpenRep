@@ -63,6 +63,7 @@ fun ExerciseDetailScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val exerciseImages by viewModel.exerciseImages.collectAsState()
+    val remoteYoutubeId by viewModel.remoteYoutubeId.collectAsState()
 
     LaunchedEffect(uiState.deleteCompleted) {
         if (uiState.deleteCompleted) onBack()
@@ -184,13 +185,14 @@ fun ExerciseDetailScreen(
                 }
             }
 
-            val hasMedia = exerciseImages.isNotEmpty() || exercise.youtubeVideoId != null
+            val effectiveYoutubeId = exercise.youtubeVideoId ?: remoteYoutubeId
+            val hasMedia = exerciseImages.isNotEmpty() || effectiveYoutubeId != null
             if (hasMedia) {
                 Spacer(Modifier.height(16.dp))
                 DetailLabel("Media")
                 MediaCarousel(
                     images = exerciseImages,
-                    youtubeVideoId = exercise.youtubeVideoId
+                    youtubeVideoId = effectiveYoutubeId
                 )
             }
         }
