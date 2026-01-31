@@ -7,63 +7,108 @@
       "youtubeId": null
     },
     "Arnold Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arnold_Dumbbell_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Arnold_Dumbbell_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Back Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Bench Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Bench_Press_-_Medium_Grip/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Barbell_Calf_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Barbell_Calf_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Clean": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Clean/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Clean/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Hip Thrust": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell JM Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/JM_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/JM_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Lunge": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Lunge/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Lunge/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Overhead Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Shoulder_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Shoulder_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Rollout": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Ab_Rollout/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Ab_Rollout/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Shrug": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Shrug/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Shrug/1.jpg"
+      ],
       "youtubeId": null
     },
     "Barbell Thruster": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Kettlebell_Thruster/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Kettlebell_Thruster/1.jpg"
+      ],
       "youtubeId": null
     },
     "Battle Ropes Alternating Waves": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Battling_Ropes/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Battling_Ropes/1.jpg"
+      ],
       "youtubeId": null
     },
     "Bear Crawl": {
@@ -71,27 +116,45 @@
       "youtubeId": null
     },
     "Behind-the-Neck Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Push_Press_-_Behind_the_Neck/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Push_Press_-_Behind_the_Neck/1.jpg"
+      ],
       "youtubeId": null
     },
     "Bicycle Crunch": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross-Body_Crunch/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cross-Body_Crunch/1.jpg"
+      ],
       "youtubeId": null
     },
     "Bodyweight Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Bodyweight Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Box Jump": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Box_Jump_Multiple_Response/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Box_Jump_Multiple_Response/1.jpg"
+      ],
       "youtubeId": null
     },
     "Bulgarian Split Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Split_Squats/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Split_Squats/1.jpg"
+      ],
       "youtubeId": null
     },
     "Burpee": {
@@ -99,95 +162,164 @@
       "youtubeId": null
     },
     "Cable Crossover": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crossover/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Crunch": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Crunch/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Biceps_Cable_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Biceps_Cable_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Front Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Cable_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Cable_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Hammer Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Hammer_Curls_-_Rope_Attachment/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Hammer_Curls_-_Rope_Attachment/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Kickback": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Legged_Cable_Kickback/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Legged_Cable_Kickback/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Lateral Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Seated_Lateral_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Overhead Tricep Extension": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rope_Overhead_Triceps_Extension/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rope_Overhead_Triceps_Extension/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Pallof Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pallof_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pallof_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Pull-Through": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pull_Through/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pull_Through/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Rear Delt Fly": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rear_Delt_Fly/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Cable_Rear_Delt_Fly/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Straight Arm Pulldown": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Straight-Arm_Pulldown/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Straight-Arm_Pulldown/1.jpg"
+      ],
       "youtubeId": null
     },
     "Cable Tricep Pushdown": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Triceps_Pushdown/1.jpg"
+      ],
       "youtubeId": null
     },
     "Chest Dip": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Chest_Version/1.jpg"
+      ],
       "youtubeId": null
     },
     "Chin-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Chin-Up/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Chin-Up/1.jpg"
+      ],
       "youtubeId": null
     },
     "Close-Grip Bench Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Barbell_Bench_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Barbell_Bench_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Concentration Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Concentration_Curls/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Concentration_Curls/1.jpg"
+      ],
       "youtubeId": null
     },
     "Crunch": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Crunches/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Crunches/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dead Bug": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dead_Bug/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dead_Bug/1.jpg"
+      ],
       "youtubeId": null
     },
     "Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Deadlift/1.jpg"
+      ],
       "youtubeId": null
     },
     "Decline Barbell Bench Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Barbell_Bench_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Barbell_Bench_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Diamond Push-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Push-Up_off_of_a_Dumbbell/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Close-Grip_Push-Up_off_of_a_Dumbbell/1.jpg"
+      ],
       "youtubeId": null
     },
     "Donkey Kick": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Donkey_Calf_Raises/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Donkey_Calf_Raises/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dragon Flag": {
@@ -195,83 +327,143 @@
       "youtubeId": null
     },
     "Dumbbell Bench Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bench_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bench_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Dumbbell_Calf_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Dumbbell_Calf_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bicep_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Bicep_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Farmer Carry": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Farmers_Walk/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Farmers_Walk/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Flye": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Flyes/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Flyes/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Front Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Dumbbell_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Dumbbell_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Goblet Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Hamstring Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Hip Thrust": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hip_Thrust/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Kickback": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Tricep_Dumbbell_Kickback/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Tricep_Dumbbell_Kickback/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Lateral Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Lateral_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Overhead Tricep Extension": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_One-Arm_Triceps_Extension/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_One-Arm_Triceps_Extension/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Pullover": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent-Arm_Dumbbell_Pullover/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent-Arm_Dumbbell_Pullover/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Rear Delt Fly": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lying_Rear_Lateral_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Lying_Rear_Lateral_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Romanian Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Stiff-Legged_Dumbbell_Deadlift/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Stiff-Legged_Dumbbell_Deadlift/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Dumbbell_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Dumbbell_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Shoulder Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shoulder_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shoulder_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Shrug": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shrug/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Shrug/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Side Bend": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Side_Bend/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Side_Bend/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Step-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Step_Ups/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dumbbell_Step_Ups/1.jpg"
+      ],
       "youtubeId": null
     },
     "Dumbbell Thruster": {
@@ -279,11 +471,17 @@
       "youtubeId": null
     },
     "EZ-Bar Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/EZ-Bar_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/EZ-Bar_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Face Pull": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Face_Pull/1.jpg"
+      ],
       "youtubeId": null
     },
     "Fire Hydrant": {
@@ -291,39 +489,66 @@
       "youtubeId": null
     },
     "Front Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Squat_Clean_Grip/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Front_Squat_Clean_Grip/1.jpg"
+      ],
       "youtubeId": null
     },
     "Glute Bridge": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Butt_Lift_Bridge/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Butt_Lift_Bridge/1.jpg"
+      ],
       "youtubeId": null
     },
     "Glute-Ham Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Ham_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Ham_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Good Morning": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Good_Morning/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Good_Morning/1.jpg"
+      ],
       "youtubeId": null
     },
     "Hack Machine Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Hack_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Hack Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hack_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Hammer Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hammer_Curls/1.jpg"
+      ],
       "youtubeId": null
     },
     "Handstand Push-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Handstand_Push-Ups/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Handstand_Push-Ups/1.jpg"
+      ],
       "youtubeId": null
     },
     "Hanging Leg Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hanging_Leg_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Hollow Body Hold": {
@@ -331,119 +556,206 @@
       "youtubeId": null
     },
     "Incline Barbell Bench Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Barbell_Incline_Bench_Press_-_Medium_Grip/1.jpg"
+      ],
       "youtubeId": null
     },
     "Incline Dumbbell Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Incline Dumbbell Fly": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Flyes/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Flyes/1.jpg"
+      ],
       "youtubeId": null
     },
     "Incline Dumbbell Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Incline_Dumbbell_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Inverted Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Inverted_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Inverted_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Jump Rope": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Jumping/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rope_Jumping/1.jpg"
+      ],
       "youtubeId": null
     },
     "Jump Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Freehand_Jump_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Freehand_Jump_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Clean and Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Clean_and_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Clean_and_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternate_Hammer_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Goblet Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Goblet_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternating_Kettlebell_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Alternating_Kettlebell_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Single-Arm Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Military_Press_To_The_Side/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Military_Press_To_The_Side/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Swing": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Swings/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/One-Arm_Kettlebell_Swings/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Tricep Extension": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sled_Overhead_Triceps_Extension/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sled_Overhead_Triceps_Extension/1.jpg"
+      ],
       "youtubeId": null
     },
     "Kettlebell Turkish Get-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Kettlebell_Turkish_Get-Up_Lunge_style/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Kettlebell_Turkish_Get-Up_Lunge_style/1.jpg"
+      ],
       "youtubeId": null
     },
     "Lat Pulldown": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide-Grip_Lat_Pulldown/1.jpg"
+      ],
       "youtubeId": null
     },
     "Leg Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lying_Leg_Curls/1.jpg"
+      ],
       "youtubeId": null
     },
     "Leg Extension": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Extensions/1.jpg"
+      ],
       "youtubeId": null
     },
     "Leg Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leg_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Leg Press Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Calf_Press_On_The_Leg_Press_Machine/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Calf_Press_On_The_Leg_Press_Machine/1.jpg"
+      ],
       "youtubeId": null
     },
     "Low Cable Fly": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Low_Cable_Crossover/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Low_Cable_Crossover/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Chest Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Bench_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Bench_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Glute Kickback": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Kickback/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Glute_Kickback/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Preacher Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Preacher_Curls/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Preacher_Curls/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Pulldown": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/V-Bar_Pulldown/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/V-Bar_Pulldown/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leverage_High_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Leverage_High_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Shoulder Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Shoulder_Military_Press/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Shoulder_Military_Press/1.jpg"
+      ],
       "youtubeId": null
     },
     "Machine Tricep Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Triceps_Extension/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Machine_Triceps_Extension/1.jpg"
+      ],
       "youtubeId": null
     },
     "Man Maker": {
@@ -451,15 +763,24 @@
       "youtubeId": null
     },
     "Medicine Ball Slam": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Slam/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Slam/1.jpg"
+      ],
       "youtubeId": null
     },
     "Mountain Climber": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Mountain_Climbers/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Mountain_Climbers/1.jpg"
+      ],
       "youtubeId": null
     },
     "Nordic Hamstring Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Natural_Glute_Ham_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Natural_Glute_Ham_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Pec Deck": {
@@ -467,59 +788,101 @@
       "youtubeId": null
     },
     "Pendlay Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bent_Over_Barbell_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "Pike Push-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Push-Up/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Decline_Push-Up/1.jpg"
+      ],
       "youtubeId": null
     },
     "Plank": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Plank/1.jpg"
+      ],
       "youtubeId": null
     },
     "Pull-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pullups/1.jpg"
+      ],
       "youtubeId": null
     },
     "Push-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Pushups/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Calf_Raises_-_With_Bands/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Calf_Raises_-_With_Bands/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Chest Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Press_-_With_Bands/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bench_Press_-_With_Bands/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lateral_Raise_-_With_Bands/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Lateral_Raise_-_With_Bands/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Deadlift_with_Bands/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Deadlift_with_Bands/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Hip Thrust": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hip_Lift_with_Band/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Hip_Lift_with_Band/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Leg Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Band_Hamstring_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Band_Hamstring_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Pull-Apart": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Pull_Apart/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Band_Pull_Apart/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Pushdown": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Low_Cable_Triceps_Extension/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Low_Cable_Triceps_Extension/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Shoulder Press": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Shoulder_Press_-_With_Bands/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Shoulder_Press_-_With_Bands/1.jpg"
+      ],
       "youtubeId": null
     },
     "Resistance Band Total Body Row": {
@@ -527,15 +890,24 @@
       "youtubeId": null
     },
     "Resistance Band Tricep Extension": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Triceps/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Overhead_Triceps/1.jpg"
+      ],
       "youtubeId": null
     },
     "Reverse Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Reverse_Barbell_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Reverse_Barbell_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Romanian Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Romanian_Deadlift/1.jpg"
+      ],
       "youtubeId": null
     },
     "Romanian Split Deadlift": {
@@ -543,103 +915,178 @@
       "youtubeId": null
     },
     "Russian Twist": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Russian_Twist/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Russian_Twist/1.jpg"
+      ],
       "youtubeId": null
     },
     "Sandbag Carry": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sandbag_Load/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sandbag_Load/1.jpg"
+      ],
       "youtubeId": null
     },
     "Seated Cable Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Cable_Rows/1.jpg"
+      ],
       "youtubeId": null
     },
     "Seated Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Calf_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Calf_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Seated Leg Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Seated_Leg_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Side Plank": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Bridge/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Side_Bridge/1.jpg"
+      ],
       "youtubeId": null
     },
     "Single-Leg Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Rocking_Standing_Calf_Raise/1.jpg"
+      ],
       "youtubeId": null
     },
     "Sissy Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Weighted_Sissy_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Weighted_Sissy_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Skull Crusher": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/EZ-Bar_Skullcrusher/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/EZ-Bar_Skullcrusher/1.jpg"
+      ],
       "youtubeId": null
     },
     "Sled Push": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sled_Push/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sled_Push/1.jpg"
+      ],
       "youtubeId": null
     },
     "Spider Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Spider_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Spider_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "Standing Calf Raise": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Calf_Raises/1.jpg"
+      ],
       "youtubeId": null
     },
     "Stiff-Leg Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Stiff-Legged_Barbell_Deadlift/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Stiff-Legged_Barbell_Deadlift/1.jpg"
+      ],
       "youtubeId": null
     },
     "Sumo Deadlift": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sumo_Deadlift/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Sumo_Deadlift/1.jpg"
+      ],
       "youtubeId": null
     },
     "Sumo Squat": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide_Stance_Barbell_Squat/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Wide_Stance_Barbell_Squat/1.jpg"
+      ],
       "youtubeId": null
     },
     "Swiss Ball Leg Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Ball_Leg_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Ball_Leg_Curl/1.jpg"
+      ],
       "youtubeId": null
     },
     "T-Bar Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/T-Bar_Row_with_Handle/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/T-Bar_Row_with_Handle/1.jpg"
+      ],
       "youtubeId": null
     },
     "Tire Flip": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Tire_Flip/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Tire_Flip/1.jpg"
+      ],
       "youtubeId": null
     },
     "Tricep Dip": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Triceps_Version/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Dips_-_Triceps_Version/1.jpg"
+      ],
       "youtubeId": null
     },
     "Upright Row": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Upright_Barbell_Row/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Upright_Barbell_Row/1.jpg"
+      ],
       "youtubeId": null
     },
     "V-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Jackknife_Sit-Up/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Jackknife_Sit-Up/1.jpg"
+      ],
       "youtubeId": null
     },
     "Walking Lunge": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Walking_Lunge/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Bodyweight_Walking_Lunge/1.jpg"
+      ],
       "youtubeId": null
     },
     "Wide Push-Up": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Push-Up_Wide/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Push-Up_Wide/1.jpg"
+      ],
       "youtubeId": null
     },
     "Woodchop": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Cable_Wood_Chop/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Standing_Cable_Wood_Chop/1.jpg"
+      ],
       "youtubeId": null
     },
     "Zottman Curl": {
-      "images": [],
+      "images": [
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/0.jpg",
+        "https://raw.githubusercontent.com/yuhonas/free-exercise-db/main/exercises/Zottman_Curl/1.jpg"
+      ],
       "youtubeId": null
     }
   }
