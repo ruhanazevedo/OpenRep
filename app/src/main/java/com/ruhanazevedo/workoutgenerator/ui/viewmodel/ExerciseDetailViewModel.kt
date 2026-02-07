@@ -47,50 +47,49 @@ class ExerciseDetailViewModel @Inject constructor(
             repository.getById(exerciseId).collectLatest { exercise ->
                 _uiState.value = _uiState.value.copy(exercise = exercise, isLoading = false)
                 if (exercise != null) {
-                    fetchExerciseImages(exercise.name)
-                    fetchRemoteMediaConfig(exercise)
+                    loadMedia(exercise)
                 }
             }
         }
     }
 
-    private fun fetchExerciseImages(name: String) {
+    private fun loadMedia(exercise: Exercise) {
         viewModelScope.launch {
-            try {
-                val baseId = withContext(Dispatchers.IO) {
-                    val response = wgerApiService.searchExercise(term = name)
-                    response.suggestions.firstOrNull()?.data?.baseId
-                } ?: return@launch
-
-                val images = withContext(Dispatchers.IO) {
-                    wgerApiService.getExerciseImages(exerciseBase = baseId).results.map { it.image }
-                }
-                _exerciseImages.value = images
-            } catch (_: Exception) {
-                _exerciseImages.value = emptyList()
-            }
-        }
-    }
-
-    private fun fetchRemoteMediaConfig(exercise: Exercise) {
-        viewModelScope.launch {
+            // Try remote config first (primary source)
+            var remoteImages = emptyList<String>()
             try {
                 val config = withContext(Dispatchers.IO) {
                     remoteMediaConfigService.getMediaConfig()
                 }
                 val entry = config.exercises.entries
                     .firstOrNull { it.key.equals(exercise.name, ignoreCase = true) }
-                    ?.value ?: return@launch
-
-                if (entry.images.isNotEmpty()) {
-                    _exerciseImages.value = entry.images + _exerciseImages.value
-                }
-
-                if (entry.youtubeId != null && exercise.youtubeVideoId == null) {
-                    _remoteYoutubeId.value = entry.youtubeId
+                    ?.value
+                if (entry != null) {
+                    remoteImages = entry.images
+                    if (entry.youtubeId != null && exercise.youtubeVideoId == null) {
+                        _remoteYoutubeId.value = entry.youtubeId
+                    }
                 }
             } catch (_: Exception) {
-                // silent — continue with Wger-only data
+                // silent — fall through to Wger
+            }
+
+            if (remoteImages.isNotEmpty()) {
+                _exerciseImages.value = remoteImages
+                return@launch
+            }
+
+            // Fallback: Wger API
+            try {
+                val baseId = withContext(Dispatchers.IO) {
+                    wgerApiService.searchExercise(term = exercise.name).suggestions.firstOrNull()?.data?.baseId
+                } ?: return@launch
+                val images = withContext(Dispatchers.IO) {
+                    wgerApiService.getExerciseImages(exerciseBase = baseId).results.map { it.image }
+                }
+                _exerciseImages.value = images
+            } catch (_: Exception) {
+                // no images available
             }
         }
     }
