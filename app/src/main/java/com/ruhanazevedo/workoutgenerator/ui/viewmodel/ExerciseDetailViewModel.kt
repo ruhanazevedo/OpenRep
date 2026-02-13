@@ -1,5 +1,6 @@
 package com.ruhanazevedo.workoutgenerator.ui.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -70,8 +71,8 @@ class ExerciseDetailViewModel @Inject constructor(
                         _remoteYoutubeId.value = entry.youtubeId
                     }
                 }
-            } catch (_: Exception) {
-                // silent — fall through to Wger
+            } catch (e: Exception) {
+                Log.e("MediaConfig", "Remote config fetch failed", e)
             }
 
             if (remoteImages.isNotEmpty()) {
