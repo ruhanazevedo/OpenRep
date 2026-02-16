@@ -11,7 +11,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.ruhanazevedo.workoutgenerator"
+        applicationId = "com.ruhanazevedo.openrep"
         minSdk = 26
         targetSdk = 35
         versionCode = 1
