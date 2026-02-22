@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.ruhanazevedo.workoutgenerator"
+    namespace = "com.ruhanazevedo.openrep"
     compileSdk = 35
 
     defaultConfig {
