@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="OpenRep" width="200"/>
+  <img src="app/src/main/assets/logo.png" alt="OpenRep" width="200"/>
 </p>
 
 # OpenRep
