@@ -34,6 +34,10 @@ Contributions are welcome. Whether it's a bug fix, a new exercise, an improvemen
 2. Create a branch for your change
 3. Open a pull request
 
+## Credits
+
+Exercise images are provided by [free-exercise-db](https://github.com/yuhonas/free-exercise-db), an open source exercise image library by yuhonas.
+
 ## License
 
 MIT
