@@ -1,5 +1,6 @@
 package com.ruhanazevedo.openrep.ui.screens
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,10 +15,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.PlayCircle
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SwapHoriz
-import androidx.compose.material3.AssistChip
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,6 +37,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -130,6 +130,15 @@ fun GeneratedPlanScreen(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         itemsIndexed(plan.days) { dayIdx, day ->
+                            val muscles = day.exercises
+                                .map { it.targetMuscle }
+                                .distinct()
+                            val muscleSubtitle = if (muscles.size > 3) {
+                                muscles.take(3).joinToString(" • ") + "..."
+                            } else {
+                                muscles.joinToString(" • ")
+                            }
+
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
                                 elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
@@ -140,13 +149,20 @@ fun GeneratedPlanScreen(
                                         style = MaterialTheme.typography.titleMedium,
                                         color = MaterialTheme.colorScheme.primary
                                     )
+                                    if (muscleSubtitle.isNotEmpty()) {
+                                        Text(
+                                            muscleSubtitle,
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
                                     Spacer(Modifier.height(8.dp))
                                     day.exercises.forEachIndexed { exIdx, exercise ->
                                         if (exIdx > 0) HorizontalDivider()
                                         ExerciseRow(
                                             exercise = exercise,
                                             onSwap = { viewModel.openSwapSheet(dayIdx, exIdx) },
-                                            onVideoClick = { exercise.youtubeVideoId?.let { onExerciseDetail(exercise.exerciseId) } }
+                                            onExerciseDetail = { onExerciseDetail(exercise.exerciseId) }
                                         )
                                     }
                                 }
@@ -222,40 +238,35 @@ fun GeneratedPlanScreen(
 private fun ExerciseRow(
     exercise: GeneratedExercise,
     onSwap: () -> Unit,
-    onVideoClick: () -> Unit
+    onExerciseDetail: () -> Unit
 ) {
     ListItem(
+        modifier = Modifier.clickable { onExerciseDetail() },
         headlineContent = { Text(exercise.name, style = MaterialTheme.typography.bodyLarge) },
         supportingContent = {
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                AssistChip(onClick = {}, label = { Text(exercise.equipment) })
+                Text(
+                    text = exercise.equipment,
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
                 Text(
                     "${exercise.sets}×${exercise.reps}",
                     style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.align(Alignment.CenterVertically)
                 )
             }
         },
         overlineContent = { Text(exercise.targetMuscle) },
         trailingContent = {
-            Row {
-                if (exercise.youtubeVideoId != null) {
-                    IconButton(onClick = onVideoClick) {
-                        Icon(
-                            Icons.Default.PlayCircle,
-                            contentDescription = "Watch video",
-                            modifier = Modifier.size(20.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
-                IconButton(onClick = onSwap) {
-                    Icon(
-                        Icons.Default.SwapHoriz,
-                        contentDescription = "Swap exercise",
-                        modifier = Modifier.size(20.dp)
-                    )
-                }
+            IconButton(onClick = onSwap) {
+                Icon(
+                    Icons.Default.SwapHoriz,
+                    contentDescription = "Swap exercise",
+                    modifier = Modifier.size(20.dp)
+                )
             }
         }
     )
