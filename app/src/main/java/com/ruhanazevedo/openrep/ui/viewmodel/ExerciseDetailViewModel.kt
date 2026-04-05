@@ -1,11 +1,9 @@
 package com.ruhanazevedo.openrep.ui.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ruhanazevedo.openrep.data.remote.RemoteMediaConfigService
-import com.ruhanazevedo.openrep.data.remote.WgerApiService
 import com.ruhanazevedo.openrep.data.repository.ExerciseRepository
 import com.ruhanazevedo.openrep.domain.model.Exercise
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +25,6 @@ data class ExerciseDetailUiState(
 @HiltViewModel
 class ExerciseDetailViewModel @Inject constructor(
     private val repository: ExerciseRepository,
-    private val wgerApiService: WgerApiService,
     private val remoteMediaConfigService: RemoteMediaConfigService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
@@ -75,23 +72,7 @@ class ExerciseDetailViewModel @Inject constructor(
                 Log.e("MediaConfig", "Remote config fetch failed", e)
             }
 
-            if (remoteImages.isNotEmpty()) {
-                _exerciseImages.value = remoteImages
-                return@launch
-            }
-
-            // Fallback: Wger API
-            try {
-                val baseId = withContext(Dispatchers.IO) {
-                    wgerApiService.searchExercise(term = exercise.name).suggestions.firstOrNull()?.data?.baseId
-                } ?: return@launch
-                val images = withContext(Dispatchers.IO) {
-                    wgerApiService.getExerciseImages(exerciseBase = baseId).results.map { it.image }
-                }
-                _exerciseImages.value = images
-            } catch (_: Exception) {
-                // no images available
-            }
+            _exerciseImages.value = remoteImages
         }
     }
 

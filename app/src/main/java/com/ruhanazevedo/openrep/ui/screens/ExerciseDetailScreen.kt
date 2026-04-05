@@ -187,12 +187,18 @@ fun ExerciseDetailScreen(
 
             val effectiveYoutubeId = exercise.youtubeVideoId ?: remoteYoutubeId
             val hasMedia = exerciseImages.isNotEmpty() || effectiveYoutubeId != null
+            Spacer(Modifier.height(16.dp))
+            DetailLabel("Media")
             if (hasMedia) {
-                Spacer(Modifier.height(16.dp))
-                DetailLabel("Media")
                 MediaCarousel(
                     images = exerciseImages,
                     youtubeVideoId = effectiveYoutubeId
+                )
+            } else {
+                Text(
+                    "No media available for this exercise. If you find a relevant image or video, consider adding a YouTube link using the button above, or contribute to our exercise library.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }
