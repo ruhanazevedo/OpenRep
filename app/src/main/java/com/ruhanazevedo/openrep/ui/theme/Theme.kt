@@ -53,7 +53,9 @@ private val DarkColorScheme = darkColorScheme(
     outline = OutlineDark,
     error = ErrorDark,
     onError = OnErrorDark,
-    errorContainer = ErrorContainerDark
+    errorContainer = ErrorContainerDark,
+    surfaceContainer = SurfaceContainerDark,
+    surfaceContainerHigh = SurfaceContainerHighDark
 )
 
 @Composable
@@ -64,6 +66,8 @@ fun WorkoutGeneratorTheme(
     val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
     MaterialTheme(
         colorScheme = colorScheme,
+        shapes = AppShapes,
+        typography = AppTypography,
         content = content
     )
 }
