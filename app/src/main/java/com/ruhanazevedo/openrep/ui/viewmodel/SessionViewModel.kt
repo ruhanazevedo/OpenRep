@@ -24,6 +24,7 @@ import javax.inject.Inject
 
 data class SessionExerciseItem(
     val planExercise: WorkoutPlanExerciseEntity,
+    val exerciseId: String,
     val exerciseName: String,
     val targetMuscle: String,
     val setsTarget: Int,
@@ -31,19 +32,32 @@ data class SessionExerciseItem(
     val instructions: String
 )
 
-data class SessionUiState(
-    val isLoading: Boolean = true,
-    val planName: String = "",
-    val exercises: List<SessionExerciseItem> = emptyList(),
-    val currentExerciseIndex: Int = 0,
+data class SessionDay(
+    val dayIndex: Int,
+    val label: String,
+    val muscleGroups: String,
+    val exercises: List<SessionExerciseItem>
+)
+
+data class ExerciseSessionState(
+    val isExpanded: Boolean = false,
     val currentSetNumber: Int = 1,
     val repsInput: String = "",
     val weightInput: String = "",
-    val loggedSets: List<SessionSetEntity> = emptyList(),
+    val loggedSets: List<SessionSetEntity> = emptyList()
+)
+
+data class SessionUiState(
+    val isLoading: Boolean = true,
+    val planName: String = "",
+    val days: List<SessionDay> = emptyList(),
+    val selectedDayIndex: Int? = null,
+    val exerciseStates: Map<String, ExerciseSessionState> = emptyMap(),
     val restTimerSeconds: Int = 0,
     val restTimerRunning: Boolean = false,
     val finishCompleted: Boolean = false,
-    val sessionId: String = ""
+    val sessionId: String = "",
+    val elapsedSeconds: Int = 0
 )
 
 @HiltViewModel
@@ -62,6 +76,7 @@ class SessionViewModel @Inject constructor(
     val uiState: StateFlow<SessionUiState> = _uiState
 
     private var restTimerJob: Job? = null
+    private var elapsedTimerJob: Job? = null
     private var restDuration: Int = 60
 
     init {
@@ -83,6 +98,7 @@ class SessionViewModel @Inject constructor(
                 val entity = exerciseDao.getById(pe.exerciseId).firstOrNull()
                 SessionExerciseItem(
                     planExercise = pe,
+                    exerciseId = pe.exerciseId,
                     exerciseName = entity?.name ?: "Unknown",
                     targetMuscle = entity?.muscleGroups?.firstOrNull() ?: "",
                     setsTarget = pe.sets,
@@ -91,6 +107,36 @@ class SessionViewModel @Inject constructor(
                 )
             }
 
+            val days = items
+                .groupBy { it.planExercise.dayIndex }
+                .entries
+                .sortedBy { it.key }
+                .map { (dayIndex, dayExercises) ->
+                    val muscles = dayExercises
+                        .map { it.targetMuscle }
+                        .filter { it.isNotBlank() }
+                        .distinct()
+                        .take(3)
+                        .joinToString(" • ")
+                    SessionDay(
+                        dayIndex = dayIndex,
+                        label = "Day ${dayIndex + 1}",
+                        muscleGroups = muscles,
+                        exercises = dayExercises
+                    )
+                }
+
+            _uiState.value = _uiState.value.copy(
+                isLoading = false,
+                planName = plan.name,
+                days = days,
+                selectedDayIndex = null
+            )
+        }
+    }
+
+    fun selectDay(dayIndex: Int) {
+        viewModelScope.launch {
             val sessionId = UUID.randomUUID().toString()
             val session = WorkoutSessionEntity(
                 id = sessionId,
@@ -102,35 +148,57 @@ class SessionViewModel @Inject constructor(
             workoutSessionDao.insert(session)
 
             _uiState.value = _uiState.value.copy(
-                isLoading = false,
-                planName = plan.name,
-                exercises = items,
+                selectedDayIndex = dayIndex,
                 sessionId = sessionId,
-                currentExerciseIndex = 0,
-                currentSetNumber = 1
+                elapsedSeconds = 0
             )
+
+            startElapsedTimer()
         }
     }
 
-    fun setRepsInput(value: String) {
-        _uiState.value = _uiState.value.copy(repsInput = value)
+    private fun startElapsedTimer() {
+        elapsedTimerJob?.cancel()
+        elapsedTimerJob = viewModelScope.launch {
+            while (true) {
+                delay(1_000)
+                _uiState.value = _uiState.value.copy(elapsedSeconds = _uiState.value.elapsedSeconds + 1)
+            }
+        }
     }
 
-    fun setWeightInput(value: String) {
-        _uiState.value = _uiState.value.copy(weightInput = value)
+    fun toggleExpand(planExerciseId: String) {
+        val current = _uiState.value.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+        val updated = _uiState.value.exerciseStates + (planExerciseId to current.copy(isExpanded = !current.isExpanded))
+        _uiState.value = _uiState.value.copy(exerciseStates = updated)
     }
 
-    fun logSet() {
+    fun setRepsInput(planExerciseId: String, value: String) {
+        val current = _uiState.value.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+        val updated = _uiState.value.exerciseStates + (planExerciseId to current.copy(repsInput = value))
+        _uiState.value = _uiState.value.copy(exerciseStates = updated)
+    }
+
+    fun setWeightInput(planExerciseId: String, value: String) {
+        val current = _uiState.value.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+        val updated = _uiState.value.exerciseStates + (planExerciseId to current.copy(weightInput = value))
+        _uiState.value = _uiState.value.copy(exerciseStates = updated)
+    }
+
+    fun logSet(planExerciseId: String) {
         val state = _uiState.value
-        val reps = state.repsInput.trim().toIntOrNull() ?: return
-        val weight = state.weightInput.trim().toFloatOrNull()
-        val exercise = state.exercises.getOrNull(state.currentExerciseIndex) ?: return
+        val exState = state.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+        val reps = exState.repsInput.trim().toIntOrNull() ?: return
+        val weight = exState.weightInput.trim().toFloatOrNull()
+
+        val day = state.days.find { it.dayIndex == state.selectedDayIndex } ?: return
+        val exercise = day.exercises.find { it.planExercise.id == planExerciseId } ?: return
 
         val setEntity = SessionSetEntity(
             id = UUID.randomUUID().toString(),
             sessionId = state.sessionId,
-            planExerciseId = exercise.planExercise.id,
-            setNumber = state.currentSetNumber,
+            planExerciseId = planExerciseId,
+            setNumber = exState.currentSetNumber,
             repsCompleted = reps,
             weightKg = weight,
             completedAt = System.currentTimeMillis()
@@ -138,30 +206,58 @@ class SessionViewModel @Inject constructor(
 
         viewModelScope.launch {
             sessionSetDao.insert(setEntity)
-            val newLogged = state.loggedSets + setEntity
+            val newLogged = exState.loggedSets + setEntity
+            val nextSetNumber = exState.currentSetNumber + 1
+            val allSetsDone = newLogged.size >= exercise.setsTarget
 
-            val nextSetNumber = state.currentSetNumber + 1
-            val setsTarget = exercise.setsTarget
+            val newExState = exState.copy(
+                loggedSets = newLogged,
+                currentSetNumber = if (allSetsDone) exState.currentSetNumber else nextSetNumber,
+                repsInput = "",
+                weightInput = "",
+                isExpanded = !allSetsDone
+            )
 
-            _uiState.value = if (nextSetNumber > setsTarget) {
-                // Move to next exercise
-                state.copy(
-                    loggedSets = newLogged,
-                    currentSetNumber = 1,
-                    currentExerciseIndex = state.currentExerciseIndex + 1,
-                    repsInput = "",
-                    weightInput = ""
-                )
-            } else {
-                state.copy(
-                    loggedSets = newLogged,
-                    currentSetNumber = nextSetNumber,
-                    repsInput = "",
-                    weightInput = ""
-                )
-            }
+            val updatedStates = state.exerciseStates + (planExerciseId to newExState)
+            _uiState.value = _uiState.value.copy(exerciseStates = updatedStates)
 
             startRestTimer()
+        }
+    }
+
+    fun quickComplete(planExerciseId: String) {
+        val state = _uiState.value
+        val day = state.days.find { it.dayIndex == state.selectedDayIndex } ?: return
+        val exercise = day.exercises.find { it.planExercise.id == planExerciseId } ?: return
+        val exState = state.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+
+        val alreadyLogged = exState.loggedSets.size
+        if (alreadyLogged >= exercise.setsTarget) return
+
+        viewModelScope.launch {
+            val newSets = mutableListOf<SessionSetEntity>()
+            for (i in alreadyLogged until exercise.setsTarget) {
+                val setEntity = SessionSetEntity(
+                    id = UUID.randomUUID().toString(),
+                    sessionId = state.sessionId,
+                    planExerciseId = planExerciseId,
+                    setNumber = i + 1,
+                    repsCompleted = exercise.repsTarget,
+                    weightKg = null,
+                    completedAt = System.currentTimeMillis()
+                )
+                sessionSetDao.insert(setEntity)
+                newSets.add(setEntity)
+            }
+
+            val newExState = exState.copy(
+                loggedSets = exState.loggedSets + newSets,
+                isExpanded = false,
+                repsInput = "",
+                weightInput = ""
+            )
+            val updatedStates = _uiState.value.exerciseStates + (planExerciseId to newExState)
+            _uiState.value = _uiState.value.copy(exerciseStates = updatedStates)
         }
     }
 
@@ -188,6 +284,7 @@ class SessionViewModel @Inject constructor(
         val state = _uiState.value
         if (state.isLoading || state.sessionId.isBlank()) return
         restTimerJob?.cancel()
+        elapsedTimerJob?.cancel()
         viewModelScope.launch {
             val existing = workoutSessionDao.getById(state.sessionId).firstOrNull() ?: return@launch
             workoutSessionDao.update(existing.copy(completedAt = System.currentTimeMillis()))
