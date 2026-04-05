@@ -68,9 +68,7 @@ class ExerciseDetailViewModel @Inject constructor(
                         _remoteYoutubeId.value = entry.youtubeId
                     }
                 }
-            } catch (e: Exception) {
-                Log.e("MediaConfig", "Remote config fetch failed", e)
-            }
+            } catch (_: Exception) { }
 
             _exerciseImages.value = remoteImages
         }
