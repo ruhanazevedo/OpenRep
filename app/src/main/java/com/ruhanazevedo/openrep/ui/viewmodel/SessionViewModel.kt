@@ -12,6 +12,7 @@ import com.ruhanazevedo.openrep.data.db.entity.SessionSetEntity
 import com.ruhanazevedo.openrep.data.db.entity.WorkoutPlanExerciseEntity
 import com.ruhanazevedo.openrep.data.db.entity.WorkoutSessionEntity
 import com.ruhanazevedo.openrep.data.remote.RemoteMediaConfigService
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -33,7 +34,9 @@ data class SessionExerciseItem(
     val targetMuscle: String,
     val setsTarget: Int,
     val repsTarget: Int,
-    val instructions: String
+    val instructions: String,
+    val exerciseType: ExerciseType = ExerciseType.STRENGTH,
+    val durationSeconds: Int? = null
 )
 
 data class SessionDay(
@@ -48,7 +51,9 @@ data class ExerciseSessionState(
     val currentSetNumber: Int = 1,
     val repsInput: String = "",
     val weightInput: String = "",
-    val loggedSets: List<SessionSetEntity> = emptyList()
+    val loggedSets: List<SessionSetEntity> = emptyList(),
+    val timerRunning: Boolean = false,
+    val remainingSeconds: Int = 0
 )
 
 data class SessionUiState(
@@ -85,6 +90,7 @@ class SessionViewModel @Inject constructor(
     private var restTimerJob: Job? = null
     private var elapsedTimerJob: Job? = null
     private var restDuration: Int = 60
+    private val exerciseTimerJobs = mutableMapOf<String, Job>()
 
     init {
         viewModelScope.launch {
@@ -121,7 +127,9 @@ class SessionViewModel @Inject constructor(
                     targetMuscle = entity?.muscleGroups?.firstOrNull() ?: "",
                     setsTarget = pe.sets,
                     repsTarget = pe.reps,
-                    instructions = entity?.instructions ?: ""
+                    instructions = entity?.instructions ?: "",
+                    exerciseType = ExerciseType.from(entity?.exerciseType ?: "STRENGTH"),
+                    durationSeconds = entity?.durationSeconds
                 )
             }
 
@@ -277,6 +285,41 @@ class SessionViewModel @Inject constructor(
             val updatedStates = _uiState.value.exerciseStates + (planExerciseId to newExState)
             _uiState.value = _uiState.value.copy(exerciseStates = updatedStates)
         }
+    }
+
+    fun startExerciseTimer(planExerciseId: String) {
+        val state = _uiState.value
+        val exercise = state.days.flatMap { it.exercises }.find { it.planExercise.id == planExerciseId } ?: return
+        val duration = exercise.durationSeconds ?: 60
+
+        exerciseTimerJobs[planExerciseId]?.cancel()
+
+        val exState = state.exerciseStates[planExerciseId] ?: ExerciseSessionState()
+        val updatedStates = state.exerciseStates + (planExerciseId to exState.copy(timerRunning = true, remainingSeconds = duration))
+        _uiState.value = _uiState.value.copy(exerciseStates = updatedStates)
+
+        exerciseTimerJobs[planExerciseId] = viewModelScope.launch {
+            var remaining = duration
+            while (remaining > 0) {
+                delay(1_000)
+                remaining--
+                val currentExState = _uiState.value.exerciseStates[planExerciseId] ?: return@launch
+                val newStates = _uiState.value.exerciseStates + (planExerciseId to currentExState.copy(remainingSeconds = remaining))
+                _uiState.value = _uiState.value.copy(exerciseStates = newStates)
+            }
+            quickComplete(planExerciseId)
+            val currentExState = _uiState.value.exerciseStates[planExerciseId] ?: return@launch
+            val newStates = _uiState.value.exerciseStates + (planExerciseId to currentExState.copy(timerRunning = false))
+            _uiState.value = _uiState.value.copy(exerciseStates = newStates)
+        }
+    }
+
+    fun stopExerciseTimer(planExerciseId: String) {
+        exerciseTimerJobs[planExerciseId]?.cancel()
+        exerciseTimerJobs.remove(planExerciseId)
+        val exState = _uiState.value.exerciseStates[planExerciseId] ?: return
+        val newStates = _uiState.value.exerciseStates + (planExerciseId to exState.copy(timerRunning = false))
+        _uiState.value = _uiState.value.copy(exerciseStates = newStates)
     }
 
     private fun startRestTimer() {

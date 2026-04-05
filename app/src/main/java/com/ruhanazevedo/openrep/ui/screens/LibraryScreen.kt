@@ -47,6 +47,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ruhanazevedo.openrep.domain.model.Exercise
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
 import com.ruhanazevedo.openrep.ui.components.ShimmerList
 import com.ruhanazevedo.openrep.ui.viewmodel.ImportDuplicatePrompt
@@ -148,6 +149,22 @@ fun LibraryScreen(
                 }
             }
 
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .horizontalScroll(rememberScrollState())
+                    .padding(horizontal = 12.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                listOf("STRENGTH" to "Strength", "WARM_UP" to "Warm-up", "STRETCH" to "Stretch").forEach { (key, label) ->
+                    FilterChip(
+                        selected = key in uiState.selectedTypes,
+                        onClick = { viewModel.toggleTypeFilter(key) },
+                        label = { Text(label) }
+                    )
+                }
+            }
+
             when {
                 uiState.isLoading -> ShimmerList()
                 uiState.exercises.isEmpty() -> {
@@ -200,6 +217,9 @@ private fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit, modifier: 
                     overflow = TextOverflow.Ellipsis
                 )
                 DifficultyBadge(difficulty = exercise.difficulty.name)
+                if (exercise.exerciseType != ExerciseType.STRENGTH) {
+                    ExerciseTypeBadge(exerciseType = exercise.exerciseType)
+                }
             }
             Spacer(Modifier.height(4.dp))
             Text(
@@ -227,5 +247,21 @@ fun DifficultyBadge(difficulty: String) {
     SuggestionChip(
         onClick = {},
         label = { Text(difficulty, style = MaterialTheme.typography.labelSmall, color = color) }
+    )
+}
+
+@Composable
+fun ExerciseTypeBadge(exerciseType: ExerciseType) {
+    val (label, containerColor) = when (exerciseType) {
+        ExerciseType.WARM_UP -> "Warm-up" to MaterialTheme.colorScheme.tertiaryContainer
+        ExerciseType.STRETCH -> "Stretch" to MaterialTheme.colorScheme.secondaryContainer
+        ExerciseType.STRENGTH -> return
+    }
+    SuggestionChip(
+        onClick = {},
+        label = { Text(label, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurface) },
+        colors = androidx.compose.material3.SuggestionChipDefaults.suggestionChipColors(
+            containerColor = containerColor
+        )
     )
 }

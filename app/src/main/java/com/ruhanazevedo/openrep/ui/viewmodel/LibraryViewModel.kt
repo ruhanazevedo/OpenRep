@@ -8,6 +8,7 @@ import com.ruhanazevedo.openrep.data.repository.ExerciseRepository
 import com.ruhanazevedo.openrep.domain.model.Difficulty
 import com.ruhanazevedo.openrep.domain.model.Equipment
 import com.ruhanazevedo.openrep.domain.model.Exercise
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -38,6 +39,7 @@ data class LibraryUiState(
     val exercises: List<Exercise> = emptyList(),
     val searchQuery: String = "",
     val selectedMuscleGroups: Set<String> = emptySet(),
+    val selectedTypes: Set<String> = emptySet(),
     val isLoading: Boolean = true,
     val importResult: ImportResult? = null,
     val duplicatePrompt: ImportDuplicatePrompt = ImportDuplicatePrompt.None
@@ -50,6 +52,7 @@ class LibraryViewModel @Inject constructor(
 
     private val searchQuery = MutableStateFlow("")
     private val selectedMuscleGroups = MutableStateFlow<Set<String>>(emptySet())
+    private val selectedTypes = MutableStateFlow<Set<String>>(emptySet())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val exercises = combine(searchQuery, selectedMuscleGroups) { query, muscles ->
@@ -67,24 +70,36 @@ class LibraryViewModel @Inject constructor(
     private var skippedCount = 0
     private val importErrors = mutableListOf<String>()
 
+    private data class FilterState(
+        val exercises: List<Exercise>,
+        val query: String,
+        val muscles: Set<String>,
+        val types: Set<String>
+    )
+
     init {
         viewModelScope.launch {
-            combine(exercises, searchQuery, selectedMuscleGroups) { list, query, muscles ->
-                Triple(list, query, muscles)
-            }.collect { (list, query, muscles) ->
-                val filtered = if (muscles.isNotEmpty()) {
-                    list.filter { exercise ->
-                        muscles.any { muscle ->
-                            exercise.muscleGroups.any { it.equals(muscle, ignoreCase = true) }
-                        }
+            combine(exercises, searchQuery, selectedMuscleGroups, selectedTypes) { list, query, muscles, types ->
+                FilterState(list, query, muscles, types)
+            }.collect { fs ->
+                val filtered = fs.exercises
+                    .let { ex ->
+                        if (fs.muscles.isNotEmpty()) ex.filter { exercise ->
+                            fs.muscles.any { muscle ->
+                                exercise.muscleGroups.any { it.equals(muscle, ignoreCase = true) }
+                            }
+                        } else ex
                     }
-                } else {
-                    list
-                }
+                    .let { ex ->
+                        if (fs.types.isNotEmpty()) ex.filter { exercise ->
+                            fs.types.any { it.equals(exercise.exerciseType.name, ignoreCase = true) }
+                        } else ex
+                    }
                 _uiState.value = _uiState.value.copy(
                     exercises = filtered,
-                    searchQuery = query,
-                    selectedMuscleGroups = muscles,
+                    searchQuery = fs.query,
+                    selectedMuscleGroups = fs.muscles,
+                    selectedTypes = fs.types,
                     isLoading = false
                 )
             }
@@ -103,6 +118,12 @@ class LibraryViewModel @Inject constructor(
 
     fun clearMuscleFilters() {
         selectedMuscleGroups.value = emptySet()
+    }
+
+    fun toggleTypeFilter(type: String) {
+        val current = selectedTypes.value.toMutableSet()
+        if (type in current) current.remove(type) else current.add(type)
+        selectedTypes.value = current
     }
 
     fun dismissImportResult() {

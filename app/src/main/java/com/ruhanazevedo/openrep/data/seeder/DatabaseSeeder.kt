@@ -32,7 +32,9 @@ class DatabaseSeeder @Inject constructor(
                 youtubeVideoId = seed.youtubeVideoId,
                 isCustom = false,
                 isDeleted = false,
-                createdAt = System.currentTimeMillis()
+                createdAt = System.currentTimeMillis(),
+                exerciseType = seed.exerciseType,
+                durationSeconds = seed.durationSeconds
             )
         }
         exerciseDao.insertAll(entities)

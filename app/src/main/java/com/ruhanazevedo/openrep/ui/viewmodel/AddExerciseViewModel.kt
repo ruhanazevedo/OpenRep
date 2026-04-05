@@ -7,6 +7,7 @@ import com.ruhanazevedo.openrep.data.repository.ExerciseRepository
 import com.ruhanazevedo.openrep.domain.model.Difficulty
 import com.ruhanazevedo.openrep.domain.model.Equipment
 import com.ruhanazevedo.openrep.domain.model.Exercise
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +29,9 @@ data class AddExerciseUiState(
     val muscleGroupError: String? = null,
     val isEditMode: Boolean = false,
     val saveCompleted: Boolean = false,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val exerciseType: String = ExerciseType.STRENGTH.name,
+    val durationSeconds: String = ""
 )
 
 @HiltViewModel
@@ -56,6 +59,8 @@ class AddExerciseViewModel @Inject constructor(
                         difficulty = exercise.difficulty.name,
                         instructions = exercise.instructions,
                         youtubeInput = exercise.youtubeVideoId ?: "",
+                        exerciseType = exercise.exerciseType.name,
+                        durationSeconds = exercise.durationSeconds?.toString() ?: "",
                         isLoading = false
                     )
                 } else {
@@ -97,6 +102,14 @@ class AddExerciseViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(youtubeInput = value)
     }
 
+    fun setExerciseType(type: String) {
+        _uiState.value = _uiState.value.copy(exerciseType = type)
+    }
+
+    fun setDuration(value: String) {
+        _uiState.value = _uiState.value.copy(durationSeconds = value)
+    }
+
     fun save() {
         val state = _uiState.value
         var hasError = false
@@ -120,6 +133,7 @@ class AddExerciseViewModel @Inject constructor(
         if (hasError) return
 
         val videoId = state.youtubeInput.trim().ifBlank { null }?.let { extractYouTubeId(it) }
+        val duration = state.durationSeconds.trim().toIntOrNull()?.takeIf { it > 0 }
 
         viewModelScope.launch {
             if (exerciseId != null) {
@@ -132,7 +146,9 @@ class AddExerciseViewModel @Inject constructor(
                         equipment = state.equipment,
                         difficulty = Difficulty.from(state.difficulty),
                         instructions = state.instructions.trim(),
-                        youtubeVideoId = videoId
+                        youtubeVideoId = videoId,
+                        exerciseType = ExerciseType.from(state.exerciseType),
+                        durationSeconds = duration
                     )
                 )
             } else {
@@ -148,7 +164,9 @@ class AddExerciseViewModel @Inject constructor(
                         youtubeVideoId = videoId,
                         isCustom = true,
                         isDeleted = false,
-                        createdAt = System.currentTimeMillis()
+                        createdAt = System.currentTimeMillis(),
+                        exerciseType = ExerciseType.from(state.exerciseType),
+                        durationSeconds = duration
                     )
                 )
             }

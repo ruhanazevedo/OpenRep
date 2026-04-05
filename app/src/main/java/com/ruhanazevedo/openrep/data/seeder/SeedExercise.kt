@@ -11,5 +11,7 @@ data class SeedExercise(
     @Json(name = "equipment") val equipment: String,
     @Json(name = "difficulty") val difficulty: String,
     @Json(name = "instructions") val instructions: String,
-    @Json(name = "youtube_video_id") val youtubeVideoId: String? = null
+    @Json(name = "youtube_video_id") val youtubeVideoId: String? = null,
+    @Json(name = "exercise_type") val exerciseType: String = "STRENGTH",
+    @Json(name = "duration_seconds") val durationSeconds: Int? = null
 )

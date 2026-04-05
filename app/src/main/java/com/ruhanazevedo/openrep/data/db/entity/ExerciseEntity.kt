@@ -38,5 +38,11 @@ data class ExerciseEntity(
     val isDeleted: Boolean,
 
     @ColumnInfo(name = "created_at")
-    val createdAt: Long
+    val createdAt: Long,
+
+    @ColumnInfo(name = "exercise_type", defaultValue = "STRENGTH")
+    val exerciseType: String = "STRENGTH",
+
+    @ColumnInfo(name = "duration_seconds")
+    val durationSeconds: Int? = null
 )

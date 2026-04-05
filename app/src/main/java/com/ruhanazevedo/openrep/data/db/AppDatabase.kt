@@ -28,7 +28,7 @@ import com.ruhanazevedo.openrep.data.db.entity.WorkoutSessionEntity
         SessionSetEntity::class,
         UserPreferencesEntity::class,
     ],
-    version = 2,
+    version = 3,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -46,6 +46,13 @@ abstract class AppDatabase : RoomDatabase() {
                 db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_days_per_week INTEGER NOT NULL DEFAULT 3")
                 db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_split_type TEXT NOT NULL DEFAULT 'A'")
                 db.execSQL("ALTER TABLE user_preferences ADD COLUMN last_selected_muscles TEXT NOT NULL DEFAULT ''")
+            }
+        }
+
+        val MIGRATION_2_3 = object : Migration(2, 3) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE exercises ADD COLUMN exercise_type TEXT NOT NULL DEFAULT 'STRENGTH'")
+                database.execSQL("ALTER TABLE exercises ADD COLUMN duration_seconds INTEGER")
             }
         }
     }

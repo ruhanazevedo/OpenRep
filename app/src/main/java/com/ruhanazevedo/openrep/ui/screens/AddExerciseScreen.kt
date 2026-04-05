@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -28,10 +29,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.ruhanazevedo.openrep.domain.model.Difficulty
 import com.ruhanazevedo.openrep.domain.model.Equipment
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
 import com.ruhanazevedo.openrep.ui.viewmodel.AddExerciseViewModel
 
@@ -79,7 +82,40 @@ fun AddExerciseScreen(
                 singleLine = true
             )
 
-            FormSection(title = "Muscle Groups *") {
+            FormSection(title = "Exercise Type") {
+                FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    listOf(
+                        ExerciseType.STRENGTH.name to "Strength",
+                        ExerciseType.WARM_UP.name to "Warm-up",
+                        ExerciseType.STRETCH.name to "Stretch"
+                    ).forEach { (key, label) ->
+                        FilterChip(
+                            selected = uiState.exerciseType == key,
+                            onClick = { viewModel.setExerciseType(key) },
+                            label = { Text(label) }
+                        )
+                    }
+                }
+            }
+
+            if (uiState.exerciseType == ExerciseType.WARM_UP.name || uiState.exerciseType == ExerciseType.STRETCH.name) {
+                OutlinedTextField(
+                    value = uiState.durationSeconds,
+                    onValueChange = { viewModel.setDuration(it) },
+                    label = { Text("Duration (seconds)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                    singleLine = true
+                )
+            }
+
+            val muscleGroupLabel = when (uiState.exerciseType) {
+                ExerciseType.WARM_UP.name -> "Muscles Warmed *"
+                ExerciseType.STRETCH.name -> "Muscles Stretched *"
+                else -> "Muscle Groups *"
+            }
+
+            FormSection(title = muscleGroupLabel) {
                 uiState.muscleGroupError?.let {
                     Text(it, color = MaterialTheme.colorScheme.error, style = MaterialTheme.typography.bodySmall)
                 }

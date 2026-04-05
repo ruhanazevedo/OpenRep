@@ -51,6 +51,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.ui.viewmodel.ExerciseSessionState
 import com.ruhanazevedo.openrep.ui.viewmodel.SessionViewModel
 
@@ -384,64 +385,103 @@ fun SessionScreen(
                                             )
                                         }
 
-                                        if (isCompleted) {
-                                            Text(
-                                                "Completed",
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-                                        } else {
-                                            Text(
-                                                "Set ${exState.currentSetNumber} of ${exercise.setsTarget} — target ${exercise.repsTarget} reps",
-                                                style = MaterialTheme.typography.labelMedium,
-                                                color = MaterialTheme.colorScheme.primary
-                                            )
-
-                                            Row(
-                                                modifier = Modifier.fillMaxWidth(),
-                                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                            ) {
-                                                OutlinedTextField(
-                                                    value = exState.repsInput,
-                                                    onValueChange = { viewModel.setRepsInput(planExerciseId, it) },
-                                                    label = { Text("Reps") },
-                                                    modifier = Modifier.weight(1f),
-                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                                    singleLine = true,
-                                                    placeholder = { Text("${exercise.repsTarget}") }
-                                                )
-                                                OutlinedTextField(
-                                                    value = exState.weightInput,
-                                                    onValueChange = { viewModel.setWeightInput(planExerciseId, it) },
-                                                    label = { Text("Weight (kg)") },
-                                                    modifier = Modifier.weight(1f),
-                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                                                    singleLine = true,
-                                                    placeholder = { Text("optional") }
-                                                )
-                                            }
-
-                                            Button(
-                                                onClick = {
-                                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                                    viewModel.logSet(planExerciseId)
-                                                },
-                                                modifier = Modifier.fillMaxWidth(),
-                                                enabled = exState.repsInput.trim().toIntOrNull() != null
-                                            ) {
-                                                Text("Log Set")
-                                            }
-                                        }
-
-                                        if (exState.loggedSets.isNotEmpty()) {
-                                            Text("Logged sets:", style = MaterialTheme.typography.labelMedium)
-                                            exState.loggedSets.forEach { set ->
-                                                val weightStr = if ((set.weightKg ?: 0f) > 0f) "${set.weightKg}kg" else "bodyweight"
+                                        if (exercise.exerciseType == ExerciseType.STRENGTH) {
+                                            if (isCompleted) {
                                                 Text(
-                                                    "Set ${set.setNumber}: ${set.repsCompleted} reps @ $weightStr",
-                                                    style = MaterialTheme.typography.bodySmall,
-                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    "Completed",
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = MaterialTheme.colorScheme.primary
                                                 )
+                                            } else {
+                                                Text(
+                                                    "Set ${exState.currentSetNumber} of ${exercise.setsTarget} — target ${exercise.repsTarget} reps",
+                                                    style = MaterialTheme.typography.labelMedium,
+                                                    color = MaterialTheme.colorScheme.primary
+                                                )
+
+                                                Row(
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                                ) {
+                                                    OutlinedTextField(
+                                                        value = exState.repsInput,
+                                                        onValueChange = { viewModel.setRepsInput(planExerciseId, it) },
+                                                        label = { Text("Reps") },
+                                                        modifier = Modifier.weight(1f),
+                                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                                        singleLine = true,
+                                                        placeholder = { Text("${exercise.repsTarget}") }
+                                                    )
+                                                    OutlinedTextField(
+                                                        value = exState.weightInput,
+                                                        onValueChange = { viewModel.setWeightInput(planExerciseId, it) },
+                                                        label = { Text("Weight (kg)") },
+                                                        modifier = Modifier.weight(1f),
+                                                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                                                        singleLine = true,
+                                                        placeholder = { Text("optional") }
+                                                    )
+                                                }
+
+                                                Button(
+                                                    onClick = {
+                                                        haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                        viewModel.logSet(planExerciseId)
+                                                    },
+                                                    modifier = Modifier.fillMaxWidth(),
+                                                    enabled = exState.repsInput.trim().toIntOrNull() != null
+                                                ) {
+                                                    Text("Log Set")
+                                                }
+                                            }
+
+                                            if (exState.loggedSets.isNotEmpty()) {
+                                                Text("Logged sets:", style = MaterialTheme.typography.labelMedium)
+                                                exState.loggedSets.forEach { set ->
+                                                    val weightStr = if ((set.weightKg ?: 0f) > 0f) "${set.weightKg}kg" else "bodyweight"
+                                                    Text(
+                                                        "Set ${set.setNumber}: ${set.repsCompleted} reps @ $weightStr",
+                                                        style = MaterialTheme.typography.bodySmall,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                }
+                                            }
+                                        } else {
+                                            val duration = exercise.durationSeconds ?: 60
+                                            when {
+                                                exState.timerRunning -> {
+                                                    Text(
+                                                        "${exState.remainingSeconds}s remaining",
+                                                        style = MaterialTheme.typography.titleLarge,
+                                                        color = MaterialTheme.colorScheme.primary
+                                                    )
+                                                    OutlinedButton(
+                                                        onClick = { viewModel.stopExerciseTimer(planExerciseId) },
+                                                        modifier = Modifier.fillMaxWidth()
+                                                    ) {
+                                                        Text("Pause")
+                                                    }
+                                                }
+                                                isCompleted -> {
+                                                    Text(
+                                                        "Completed",
+                                                        style = MaterialTheme.typography.labelMedium,
+                                                        color = MaterialTheme.colorScheme.primary
+                                                    )
+                                                }
+                                                else -> {
+                                                    Text(
+                                                        "Duration: ${duration}s",
+                                                        style = MaterialTheme.typography.bodyMedium,
+                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                    )
+                                                    Button(
+                                                        onClick = { viewModel.startExerciseTimer(planExerciseId) },
+                                                        modifier = Modifier.fillMaxWidth()
+                                                    ) {
+                                                        Text("Start Timer")
+                                                    }
+                                                }
                                             }
                                         }
                                     }
