@@ -27,7 +27,8 @@ data class SessionExerciseItem(
     val exerciseName: String,
     val targetMuscle: String,
     val setsTarget: Int,
-    val repsTarget: Int
+    val repsTarget: Int,
+    val instructions: String
 )
 
 data class SessionUiState(
@@ -85,7 +86,8 @@ class SessionViewModel @Inject constructor(
                     exerciseName = entity?.name ?: "Unknown",
                     targetMuscle = entity?.muscleGroups?.firstOrNull() ?: "",
                     setsTarget = pe.sets,
-                    repsTarget = pe.reps
+                    repsTarget = pe.reps,
+                    instructions = entity?.instructions ?: ""
                 )
             }
 

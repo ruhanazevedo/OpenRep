@@ -15,6 +15,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -49,10 +50,12 @@ fun SessionScreen(
     planId: String,
     onFinish: () -> Unit = {},
     onBack: () -> Unit = {},
+    onExerciseDetail: (String) -> Unit = {},
     viewModel: SessionViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val haptic = LocalHapticFeedback.current
+    val exercisesDone = state.currentExerciseIndex >= state.exercises.size
 
     LaunchedEffect(state.finishCompleted) {
         if (state.finishCompleted) onFinish()
@@ -65,6 +68,13 @@ fun SessionScreen(
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    if (!exercisesDone && state.exercises.isNotEmpty()) {
+                        IconButton(onClick = { onExerciseDetail(state.exercises[state.currentExerciseIndex].planExercise.exerciseId) }) {
+                            Icon(Icons.Default.Info, contentDescription = "Exercise info")
+                        }
                     }
                 }
             )
@@ -88,7 +98,6 @@ fun SessionScreen(
                 ) { Text("No exercises in this plan.") }
             }
             else -> {
-                val exercisesDone = state.currentExerciseIndex >= state.exercises.size
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
@@ -166,6 +175,14 @@ fun SessionScreen(
                                     style = MaterialTheme.typography.labelLarge,
                                     color = MaterialTheme.colorScheme.primary
                                 )
+                                if (currentExercise.instructions.isNotBlank()) {
+                                    Spacer(Modifier.height(8.dp))
+                                    Text(
+                                        currentExercise.instructions,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
                             }
                         }
 

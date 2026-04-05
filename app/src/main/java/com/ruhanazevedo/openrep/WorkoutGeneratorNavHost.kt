@@ -91,7 +91,7 @@ fun WorkoutGeneratorNavHost() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Screen.Library.route,
+            startDestination = Screen.History.route,
             modifier = Modifier.padding(innerPadding),
             enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
             exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 3 }) },
@@ -205,7 +205,10 @@ fun WorkoutGeneratorNavHost() {
                 SessionScreen(
                     planId = backStackEntry.arguments?.getString("planId") ?: "",
                     onFinish = { navController.popBackStack(Screen.History.route, false) },
-                    onBack = { navController.popBackStack() }
+                    onBack = { navController.popBackStack() },
+                    onExerciseDetail = { exerciseId ->
+                        navController.navigate(Screen.ExerciseDetail.createRoute(exerciseId))
+                    }
                 )
             }
 
