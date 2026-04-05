@@ -5,7 +5,7 @@ enum class SplitType(val label: String, val description: String) {
     AB("AB", "Two alternating sessions (A and B)"),
     ABC("ABC", "Three alternating sessions"),
     PPL("PPL", "Push / Pull / Legs"),
-    AA("AA", "Same workout every day");
+    AA("Antagonist", "Paired antagonist muscle groups per session");
 
     companion object {
         fun from(value: String): SplitType =

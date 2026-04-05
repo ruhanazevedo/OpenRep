@@ -81,13 +81,10 @@ class WorkoutGeneratorEngine @Inject constructor(
                 )
                 if (session.isEmpty()) emptyList() else listOf(session)
             }
-            SplitType.AA -> {
-                val session = buildSessionForMuscles(
-                    input.muscleGroups, input.exercisesPerMuscle,
-                    equipmentFilter, equipmentList, difficultyList, setsReps
-                )
-                if (session.isEmpty()) emptyList() else listOf(session)
-            }
+            SplitType.AA -> buildAntagonistSessions(
+                input.muscleGroups, input.exercisesPerMuscle,
+                equipmentFilter, equipmentList, difficultyList, setsReps
+            )
             SplitType.AB -> {
                 val halves = splitMusclesInto(input.muscleGroups, 2)
                 halves.mapNotNull { muscles ->
@@ -163,6 +160,71 @@ class WorkoutGeneratorEngine @Inject constructor(
         }
 
         return sessions
+    }
+
+    private suspend fun buildAntagonistSessions(
+        selectedMuscles: List<String>,
+        exercisesPerMuscle: Int,
+        equipmentFilter: String,
+        equipmentList: List<String>,
+        difficultyList: List<String>,
+        setsReps: Pair<Int, Int>
+    ): List<List<GeneratedExercise>> {
+        val antagonisticPairs = mapOf(
+            MuscleGroup.CHEST to MuscleGroup.BACK,
+            MuscleGroup.BACK to MuscleGroup.CHEST,
+            MuscleGroup.BICEPS to MuscleGroup.TRICEPS,
+            MuscleGroup.TRICEPS to MuscleGroup.BICEPS,
+            MuscleGroup.QUADS to MuscleGroup.HAMSTRINGS,
+            MuscleGroup.HAMSTRINGS to MuscleGroup.QUADS,
+            MuscleGroup.SHOULDERS to MuscleGroup.CORE,
+            MuscleGroup.CORE to MuscleGroup.SHOULDERS,
+            MuscleGroup.GLUTES to MuscleGroup.CALVES,
+            MuscleGroup.CALVES to MuscleGroup.GLUTES
+        )
+
+        val selected = selectedMuscles.toSet()
+        val fullBodySelected = selected.contains(MuscleGroup.FULL_BODY)
+        val workMuscles = selectedMuscles.filter { it != MuscleGroup.FULL_BODY }
+
+        if (workMuscles.isEmpty()) {
+            val session = buildSessionForMuscles(
+                listOf(MuscleGroup.FULL_BODY), exercisesPerMuscle,
+                equipmentFilter, equipmentList, difficultyList, setsReps
+            )
+            return if (session.isEmpty()) emptyList() else listOf(session)
+        }
+
+        val sessionGroups = mutableListOf<List<String>>()
+        val visited = mutableSetOf<String>()
+
+        for (muscle in workMuscles) {
+            if (muscle in visited) continue
+            visited.add(muscle)
+            val antagonist = antagonisticPairs[muscle]
+            if (antagonist != null && antagonist in selected && antagonist !in visited) {
+                visited.add(antagonist)
+                sessionGroups.add(listOf(muscle, antagonist))
+            } else {
+                sessionGroups.add(listOf(muscle))
+            }
+        }
+
+        if (sessionGroups.size == 1) {
+            val muscles = if (fullBodySelected) sessionGroups[0] + MuscleGroup.FULL_BODY else sessionGroups[0]
+            val session = buildSessionForMuscles(
+                muscles, exercisesPerMuscle, equipmentFilter, equipmentList, difficultyList, setsReps
+            )
+            return if (session.isEmpty()) emptyList() else listOf(session)
+        }
+
+        return sessionGroups.mapNotNull { group ->
+            val muscles = if (fullBodySelected) group + MuscleGroup.FULL_BODY else group
+            val session = buildSessionForMuscles(
+                muscles, exercisesPerMuscle, equipmentFilter, equipmentList, difficultyList, setsReps
+            )
+            session.ifEmpty { null }
+        }
     }
 
     private suspend fun buildSessionForMuscles(
