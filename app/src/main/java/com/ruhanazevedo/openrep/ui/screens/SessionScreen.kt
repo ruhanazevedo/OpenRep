@@ -11,6 +11,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -24,6 +30,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
@@ -51,6 +58,20 @@ private fun formatElapsed(seconds: Int): String {
     val m = seconds / 60
     val s = seconds % 60
     return "%02d:%02d".format(m, s)
+}
+
+@Composable
+private fun StatCard(label: String, value: String) {
+    Card(elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)) {
+        Column(
+            modifier = Modifier.padding(horizontal = 20.dp, vertical = 12.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(4.dp)
+        ) {
+            Text(value, style = MaterialTheme.typography.titleLarge)
+            Text(label, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,6 +119,91 @@ fun SessionScreen(
                         .padding(innerPadding),
                     contentAlignment = Alignment.Center
                 ) { CircularProgressIndicator() }
+            }
+            state.showSummary -> {
+                val selectedDay = state.days.find { it.dayIndex == state.selectedDayIndex }
+                val exercises = selectedDay?.exercises ?: emptyList()
+                val completedCount = exercises.count { ex ->
+                    (state.exerciseStates[ex.planExercise.id] ?: ExerciseSessionState()).loggedSets.size >= ex.setsTarget
+                }
+                val totalSets = state.exerciseStates.values.sumOf { it.loggedSets.size }
+                val totalVolume = state.exerciseStates.values
+                    .flatMap { it.loggedSets }
+                    .filter { (it.weightKg ?: 0f) > 0f }
+                    .sumOf { (it.repsCompleted * (it.weightKg ?: 0f)).toDouble() }
+                    .toFloat()
+
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding)
+                        .verticalScroll(rememberScrollState())
+                        .padding(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Text(
+                        "Workout Complete!",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.primary
+                    )
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceEvenly
+                    ) {
+                        StatCard("Time", formatElapsed(state.elapsedSeconds))
+                        StatCard("Exercises", "$completedCount/${exercises.size}")
+                        StatCard("Sets", "$totalSets")
+                    }
+
+                    if (totalVolume > 0f) {
+                        Text(
+                            "Total volume: ${"%.1f".format(totalVolume)}kg",
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+
+                    HorizontalDivider()
+
+                    if (exercises.isNotEmpty()) {
+                        Text(
+                            "Exercises",
+                            style = MaterialTheme.typography.labelLarge,
+                            color = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier.fillMaxWidth()
+                        )
+                        exercises.forEach { exercise ->
+                            val sets = state.exerciseStates[exercise.planExercise.id]?.loggedSets ?: emptyList()
+                            if (sets.isNotEmpty()) {
+                                Column(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalArrangement = Arrangement.spacedBy(2.dp)
+                                ) {
+                                    Text(exercise.exerciseName, style = MaterialTheme.typography.titleSmall)
+                                    sets.forEach { set ->
+                                        val w = if ((set.weightKg ?: 0f) > 0f) " @ ${set.weightKg}kg" else ""
+                                        Text(
+                                            "  Set ${set.setNumber}: ${set.repsCompleted} reps$w",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(Modifier.height(8.dp))
+
+                    Button(
+                        onClick = { viewModel.dismissSummary() },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Done")
+                    }
+                }
             }
             state.days.isEmpty() -> {
                 Box(
@@ -216,6 +322,18 @@ fun SessionScreen(
                                         .padding(horizontal = 16.dp, vertical = 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
+                                    val imageUrl = state.exerciseImages[exercise.exerciseName.lowercase()]
+                                    if (imageUrl != null) {
+                                        AsyncImage(
+                                            model = imageUrl,
+                                            contentDescription = null,
+                                            contentScale = ContentScale.Crop,
+                                            modifier = Modifier
+                                                .size(56.dp)
+                                                .clip(RoundedCornerShape(8.dp))
+                                        )
+                                        Spacer(Modifier.width(12.dp))
+                                    }
                                     Column(
                                         modifier = Modifier
                                             .weight(1f)
@@ -266,45 +384,53 @@ fun SessionScreen(
                                             )
                                         }
 
-                                        Text(
-                                            "Set ${exState.currentSetNumber} of ${exercise.setsTarget} — target ${exercise.repsTarget} reps",
-                                            style = MaterialTheme.typography.labelMedium,
-                                            color = MaterialTheme.colorScheme.primary
-                                        )
-
-                                        Row(
-                                            modifier = Modifier.fillMaxWidth(),
-                                            horizontalArrangement = Arrangement.spacedBy(12.dp)
-                                        ) {
-                                            OutlinedTextField(
-                                                value = exState.repsInput,
-                                                onValueChange = { viewModel.setRepsInput(planExerciseId, it) },
-                                                label = { Text("Reps") },
-                                                modifier = Modifier.weight(1f),
-                                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                                                singleLine = true,
-                                                placeholder = { Text("${exercise.repsTarget}") }
+                                        if (isCompleted) {
+                                            Text(
+                                                "Completed",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.primary
                                             )
-                                            OutlinedTextField(
-                                                value = exState.weightInput,
-                                                onValueChange = { viewModel.setWeightInput(planExerciseId, it) },
-                                                label = { Text("Weight (kg)") },
-                                                modifier = Modifier.weight(1f),
-                                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
-                                                singleLine = true,
-                                                placeholder = { Text("optional") }
+                                        } else {
+                                            Text(
+                                                "Set ${exState.currentSetNumber} of ${exercise.setsTarget} — target ${exercise.repsTarget} reps",
+                                                style = MaterialTheme.typography.labelMedium,
+                                                color = MaterialTheme.colorScheme.primary
                                             )
-                                        }
 
-                                        Button(
-                                            onClick = {
-                                                haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                                                viewModel.logSet(planExerciseId)
-                                            },
-                                            modifier = Modifier.fillMaxWidth(),
-                                            enabled = exState.repsInput.trim().toIntOrNull() != null
-                                        ) {
-                                            Text("Log Set")
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                                            ) {
+                                                OutlinedTextField(
+                                                    value = exState.repsInput,
+                                                    onValueChange = { viewModel.setRepsInput(planExerciseId, it) },
+                                                    label = { Text("Reps") },
+                                                    modifier = Modifier.weight(1f),
+                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                                                    singleLine = true,
+                                                    placeholder = { Text("${exercise.repsTarget}") }
+                                                )
+                                                OutlinedTextField(
+                                                    value = exState.weightInput,
+                                                    onValueChange = { viewModel.setWeightInput(planExerciseId, it) },
+                                                    label = { Text("Weight (kg)") },
+                                                    modifier = Modifier.weight(1f),
+                                                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
+                                                    singleLine = true,
+                                                    placeholder = { Text("optional") }
+                                                )
+                                            }
+
+                                            Button(
+                                                onClick = {
+                                                    haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                                                    viewModel.logSet(planExerciseId)
+                                                },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                enabled = exState.repsInput.trim().toIntOrNull() != null
+                                            ) {
+                                                Text("Log Set")
+                                            }
                                         }
 
                                         if (exState.loggedSets.isNotEmpty()) {

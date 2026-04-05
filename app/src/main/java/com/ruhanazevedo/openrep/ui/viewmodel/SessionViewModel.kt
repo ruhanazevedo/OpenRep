@@ -11,14 +11,18 @@ import com.ruhanazevedo.openrep.data.db.dao.UserPreferencesDao
 import com.ruhanazevedo.openrep.data.db.entity.SessionSetEntity
 import com.ruhanazevedo.openrep.data.db.entity.WorkoutPlanExerciseEntity
 import com.ruhanazevedo.openrep.data.db.entity.WorkoutSessionEntity
+import com.ruhanazevedo.openrep.data.remote.RemoteMediaConfigService
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.UUID
 import javax.inject.Inject
 
@@ -56,8 +60,10 @@ data class SessionUiState(
     val restTimerSeconds: Int = 0,
     val restTimerRunning: Boolean = false,
     val finishCompleted: Boolean = false,
+    val showSummary: Boolean = false,
     val sessionId: String = "",
-    val elapsedSeconds: Int = 0
+    val elapsedSeconds: Int = 0,
+    val exerciseImages: Map<String, String> = emptyMap()
 )
 
 @HiltViewModel
@@ -67,6 +73,7 @@ class SessionViewModel @Inject constructor(
     private val sessionSetDao: SessionSetDao,
     private val exerciseDao: ExerciseDao,
     private val userPreferencesDao: UserPreferencesDao,
+    private val remoteMediaConfigService: RemoteMediaConfigService,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -80,6 +87,17 @@ class SessionViewModel @Inject constructor(
     private var restDuration: Int = 60
 
     init {
+        viewModelScope.launch {
+            try {
+                val config = withContext(Dispatchers.IO) { remoteMediaConfigService.getMediaConfig() }
+                val imageMap = config.exercises.entries
+                    .mapNotNull { (name, entry) ->
+                        entry.images.firstOrNull()?.let { name.lowercase() to it }
+                    }.toMap()
+                _uiState.update { it.copy(exerciseImages = imageMap) }
+            } catch (_: Exception) { }
+        }
+
         viewModelScope.launch {
             val prefs = userPreferencesDao.get().firstOrNull()
             restDuration = prefs?.restTimerSeconds ?: 60
@@ -288,7 +306,11 @@ class SessionViewModel @Inject constructor(
         viewModelScope.launch {
             val existing = workoutSessionDao.getById(state.sessionId).firstOrNull() ?: return@launch
             workoutSessionDao.update(existing.copy(completedAt = System.currentTimeMillis()))
-            _uiState.value = _uiState.value.copy(finishCompleted = true)
+            _uiState.value = _uiState.value.copy(showSummary = true)
         }
+    }
+
+    fun dismissSummary() {
+        _uiState.value = _uiState.value.copy(finishCompleted = true)
     }
 }
