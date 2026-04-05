@@ -52,6 +52,7 @@ interface ExerciseDao {
     @Query("""
         SELECT * FROM exercises
         WHERE is_deleted = 0
+          AND exercise_type = 'STRENGTH'
           AND muscle_groups LIKE '%' || :group || '%'
           AND (:equipmentFilter = '' OR equipment IN (:equipmentList))
           AND difficulty IN (:difficultyList)
