@@ -32,5 +32,8 @@ data class UserPreferencesEntity(
     val lastSplitType: String = "A",
 
     @ColumnInfo(name = "last_selected_muscles")
-    val lastSelectedMuscles: List<String> = emptyList()
+    val lastSelectedMuscles: List<String> = emptyList(),
+
+    @ColumnInfo(name = "is_dark_mode", defaultValue = "0")
+    val isDarkMode: Boolean = false
 )

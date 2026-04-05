@@ -43,6 +43,8 @@ class SettingsViewModel @Inject constructor(
 
     fun setExercisesPerMuscleGroup(count: Int) = update { it.copy(exercisesPerMuscleGroup = count) }
 
+    fun setDarkMode(enabled: Boolean) = update { it.copy(isDarkMode = enabled) }
+
     private fun update(transform: (UserPreferencesEntity) -> UserPreferencesEntity) {
         viewModelScope.launch {
             val current = repository.preferences.first()

@@ -17,6 +17,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Slider
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -53,6 +54,29 @@ fun SettingsScreen(
                 .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
+            // ── Appearance ──────────────────────────────────────────────
+            SectionHeader("Appearance")
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Column {
+                    Text("Dark Mode", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        if (prefs.isDarkMode) "Dark theme enabled" else "Light theme enabled",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Switch(
+                    checked = prefs.isDarkMode,
+                    onCheckedChange = { viewModel.setDarkMode(it) }
+                )
+            }
+
+            HorizontalDivider()
+
             // ── Rest timer ──────────────────────────────────────────────
             SectionHeader("Rest Timer")
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
