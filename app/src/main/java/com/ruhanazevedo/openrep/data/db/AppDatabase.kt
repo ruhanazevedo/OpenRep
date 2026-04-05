@@ -28,7 +28,7 @@ import com.ruhanazevedo.openrep.data.db.entity.WorkoutSessionEntity
         SessionSetEntity::class,
         UserPreferencesEntity::class,
     ],
-    version = 3,
+    version = 4,
     exportSchema = true
 )
 @TypeConverters(Converters::class)
@@ -53,6 +53,12 @@ abstract class AppDatabase : RoomDatabase() {
             override fun migrate(database: SupportSQLiteDatabase) {
                 database.execSQL("ALTER TABLE exercises ADD COLUMN exercise_type TEXT NOT NULL DEFAULT 'STRENGTH'")
                 database.execSQL("ALTER TABLE exercises ADD COLUMN duration_seconds INTEGER")
+            }
+        }
+
+        val MIGRATION_3_4 = object : Migration(3, 4) {
+            override fun migrate(database: SupportSQLiteDatabase) {
+                database.execSQL("ALTER TABLE workout_sessions ADD COLUMN day_index INTEGER")
             }
         }
     }

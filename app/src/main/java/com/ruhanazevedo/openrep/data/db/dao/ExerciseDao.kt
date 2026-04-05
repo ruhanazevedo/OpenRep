@@ -66,4 +66,7 @@ interface ExerciseDao {
 
     @Query("SELECT COUNT(*) FROM exercises WHERE is_custom = 0 AND is_deleted = 0")
     suspend fun countSeeded(): Int
+
+    @Query("SELECT COUNT(*) FROM exercises WHERE is_deleted = 0 AND is_custom = 0 AND exercise_type = :type")
+    suspend fun countSeededByType(type: String): Int
 }

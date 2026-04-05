@@ -24,4 +24,7 @@ interface WorkoutSessionDao {
 
     @Query("DELETE FROM workout_sessions WHERE id = :id")
     suspend fun delete(id: String)
+
+    @Query("SELECT * FROM workout_sessions WHERE plan_id = :planId AND day_index = :dayIndex AND completed_at IS NOT NULL ORDER BY completed_at DESC LIMIT 1")
+    suspend fun getLastCompletedForDay(planId: String, dayIndex: Int): WorkoutSessionEntity?
 }

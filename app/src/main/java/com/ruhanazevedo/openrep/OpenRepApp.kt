@@ -21,6 +21,7 @@ class OpenRepApp : Application() {
         super.onCreate()
         applicationScope.launch {
             databaseSeeder.seedIfNeeded()
+            databaseSeeder.seedWarmupAndStretchIfNeeded()
         }
     }
 }

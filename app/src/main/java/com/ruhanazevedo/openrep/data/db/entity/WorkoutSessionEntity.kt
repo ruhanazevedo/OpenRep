@@ -33,5 +33,8 @@ data class WorkoutSessionEntity(
     val completedAt: Long?,
 
     @ColumnInfo(name = "notes")
-    val notes: String
+    val notes: String,
+
+    @ColumnInfo(name = "day_index")
+    val dayIndex: Int? = null
 )

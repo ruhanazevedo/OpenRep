@@ -1,6 +1,8 @@
 package com.ruhanazevedo.openrep.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,6 +45,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -244,6 +250,23 @@ fun SessionScreen(
                                         color = MaterialTheme.colorScheme.onSurfaceVariant
                                     )
                                 }
+                                val lastDoneText = when {
+                                    day.lastDoneAt == null -> "Never done"
+                                    else -> {
+                                        val daysAgo = ((System.currentTimeMillis() - day.lastDoneAt) / (1000 * 60 * 60 * 24)).toInt()
+                                        when (daysAgo) {
+                                            0 -> "Done today"
+                                            1 -> "Done yesterday"
+                                            else -> "Done $daysAgo days ago"
+                                        }
+                                    }
+                                }
+                                Text(
+                                    lastDoneText,
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = if (day.lastDoneAt == null) MaterialTheme.colorScheme.onSurfaceVariant
+                                            else MaterialTheme.colorScheme.primary
+                                )
                             }
                         }
                     }
@@ -323,7 +346,8 @@ fun SessionScreen(
                                         .padding(horizontal = 16.dp, vertical = 12.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    val imageUrl = state.exerciseImages[exercise.exerciseName.lowercase()]
+                                    val images = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
+                                    val imageUrl = images.firstOrNull()
                                     if (imageUrl != null) {
                                         AsyncImage(
                                             model = imageUrl,
@@ -377,6 +401,37 @@ fun SessionScreen(
                                             .padding(bottom = 16.dp),
                                         verticalArrangement = Arrangement.spacedBy(8.dp)
                                     ) {
+                                        val expandedImages = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
+                                        if (expandedImages.isNotEmpty()) {
+                                            var currentImageIndex by remember(exercise.exerciseId) { mutableIntStateOf(0) }
+
+                                            LaunchedEffect(exercise.exerciseId) {
+                                                if (expandedImages.size > 1) {
+                                                    while (true) {
+                                                        delay(500L)
+                                                        currentImageIndex = (currentImageIndex + 1) % expandedImages.size
+                                                    }
+                                                }
+                                            }
+
+                                            Crossfade(
+                                                targetState = currentImageIndex,
+                                                animationSpec = tween(durationMillis = 300),
+                                                label = "exercise_image_slide"
+                                            ) { index ->
+                                                AsyncImage(
+                                                    model = expandedImages[index],
+                                                    contentDescription = "Exercise image",
+                                                    contentScale = ContentScale.Crop,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(180.dp)
+                                                        .clip(RoundedCornerShape(8.dp))
+                                                )
+                                            }
+                                            Spacer(Modifier.height(8.dp))
+                                        }
+
                                         if (exercise.instructions.isNotBlank()) {
                                             Text(
                                                 exercise.instructions,

@@ -43,7 +43,8 @@ data class SessionDay(
     val dayIndex: Int,
     val label: String,
     val muscleGroups: String,
-    val exercises: List<SessionExerciseItem>
+    val exercises: List<SessionExerciseItem>,
+    val lastDoneAt: Long? = null
 )
 
 data class ExerciseSessionState(
@@ -68,7 +69,7 @@ data class SessionUiState(
     val showSummary: Boolean = false,
     val sessionId: String = "",
     val elapsedSeconds: Int = 0,
-    val exerciseImages: Map<String, String> = emptyMap()
+    val exerciseImages: Map<String, List<String>> = emptyMap()
 )
 
 @HiltViewModel
@@ -97,9 +98,8 @@ class SessionViewModel @Inject constructor(
             try {
                 val config = withContext(Dispatchers.IO) { remoteMediaConfigService.getMediaConfig() }
                 val imageMap = config.exercises.entries
-                    .mapNotNull { (name, entry) ->
-                        entry.images.firstOrNull()?.let { name.lowercase() to it }
-                    }.toMap()
+                    .filter { it.value.images.isNotEmpty() }
+                    .associate { (name, entry) -> name.lowercase() to entry.images }
                 _uiState.update { it.copy(exerciseImages = imageMap) }
             } catch (_: Exception) { }
         }
@@ -152,10 +152,15 @@ class SessionViewModel @Inject constructor(
                     )
                 }
 
+            val daysWithHistory = days.map { day ->
+                val last = workoutSessionDao.getLastCompletedForDay(planId, day.dayIndex)
+                day.copy(lastDoneAt = last?.completedAt)
+            }
+
             _uiState.value = _uiState.value.copy(
                 isLoading = false,
                 planName = plan.name,
-                days = days,
+                days = daysWithHistory,
                 selectedDayIndex = null
             )
         }
@@ -169,6 +174,7 @@ class SessionViewModel @Inject constructor(
                 planId = planId,
                 startedAt = System.currentTimeMillis(),
                 completedAt = null,
+                dayIndex = dayIndex,
                 notes = ""
             )
             workoutSessionDao.insert(session)

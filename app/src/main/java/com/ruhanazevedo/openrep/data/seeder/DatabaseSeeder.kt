@@ -16,6 +16,37 @@ class DatabaseSeeder @Inject constructor(
     @ApplicationContext private val context: Context,
     private val exerciseDao: ExerciseDao
 ) {
+    suspend fun seedWarmupAndStretchIfNeeded() {
+        val hasWarmup = exerciseDao.countSeededByType("WARM_UP") > 0
+        val hasStretch = exerciseDao.countSeededByType("STRETCH") > 0
+        if (hasWarmup && hasStretch) return
+
+        val allSeeds = loadSeedExercises()
+        val toInsert = allSeeds.filter { seed ->
+            (seed.exerciseType == "WARM_UP" && !hasWarmup) ||
+            (seed.exerciseType == "STRETCH" && !hasStretch)
+        }
+        toInsert.forEach { seed ->
+            exerciseDao.insert(
+                ExerciseEntity(
+                    id = UUID.randomUUID().toString(),
+                    name = seed.name,
+                    muscleGroups = seed.muscleGroups,
+                    secondaryMuscleGroups = seed.secondaryMuscleGroups,
+                    equipment = seed.equipment,
+                    difficulty = seed.difficulty,
+                    instructions = seed.instructions,
+                    youtubeVideoId = seed.youtubeVideoId,
+                    exerciseType = seed.exerciseType,
+                    durationSeconds = seed.durationSeconds,
+                    isCustom = false,
+                    isDeleted = false,
+                    createdAt = System.currentTimeMillis()
+                )
+            )
+        }
+    }
+
     suspend fun seedIfNeeded() {
         val count = exerciseDao.countSeeded()
         if (count > 0) return // idempotent — already seeded
