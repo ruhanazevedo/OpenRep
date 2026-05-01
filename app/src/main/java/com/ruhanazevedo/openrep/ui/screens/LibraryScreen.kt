@@ -3,6 +3,7 @@ package com.ruhanazevedo.openrep.ui.screens
 import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -14,9 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.FitnessCenter
@@ -42,10 +47,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ruhanazevedo.openrep.domain.model.Difficulty
 import com.ruhanazevedo.openrep.domain.model.Exercise
 import com.ruhanazevedo.openrep.domain.model.ExerciseType
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
@@ -196,41 +204,93 @@ fun LibraryScreen(
 
 @Composable
 private fun ExerciseListItem(exercise: Exercise, onClick: () -> Unit, modifier: Modifier = Modifier) {
+    val difficultyColor = when (exercise.difficulty) {
+        Difficulty.Beginner -> Color(0xFF4CAF50)
+        Difficulty.Intermediate -> Color(0xFF00D4FF)
+        Difficulty.Advanced -> Color(0xFFFF5252)
+    }
+
+    val primaryMuscle = exercise.muscleGroups.firstOrNull() ?: ""
+    val avatarInitials = primaryMuscle
+        .split(" ")
+        .take(2)
+        .joinToString("") { it.take(1).uppercase() }
+        .take(2)
+
     Card(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp)
             .clickable(onClick = onClick),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainer
+        )
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // Difficulty accent bar
+            Box(
+                modifier = Modifier
+                    .width(4.dp)
+                    .height(72.dp)
+                    .clip(RoundedCornerShape(topStart = 12.dp, bottomStart = 12.dp))
+                    .background(difficultyColor)
+            )
+
+            Spacer(Modifier.width(12.dp))
+
+            // Muscle group avatar
+            Box(
+                modifier = Modifier
+                    .size(44.dp)
+                    .clip(CircleShape)
+                    .background(difficultyColor.copy(alpha = 0.15f)),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = avatarInitials,
+                    style = MaterialTheme.typography.labelMedium,
+                    color = difficultyColor
+                )
+            }
+
+            Spacer(Modifier.width(12.dp))
+
+            // Text content
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 14.dp),
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 Text(
                     text = exercise.name,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f),
+                    style = MaterialTheme.typography.titleSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = buildString {
+                        append(exercise.muscleGroups.joinToString(" • "))
+                        if (exercise.equipment.isNotBlank()) append("  ·  ${exercise.equipment}")
+                    },
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
-                DifficultyBadge(difficulty = exercise.difficulty.name)
-                if (exercise.exerciseType != ExerciseType.STRENGTH) {
-                    ExerciseTypeBadge(exerciseType = exercise.exerciseType)
-                }
             }
-            Spacer(Modifier.height(4.dp))
+
+            // Difficulty label
             Text(
-                text = exercise.muscleGroups.joinToString(", "),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            Text(
-                text = exercise.equipment,
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                text = exercise.difficulty.name,
+                style = MaterialTheme.typography.labelSmall,
+                color = difficultyColor,
+                modifier = Modifier.padding(end = 16.dp)
             )
         }
     }
