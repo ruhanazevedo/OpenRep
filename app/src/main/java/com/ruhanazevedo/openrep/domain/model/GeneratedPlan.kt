@@ -10,10 +10,19 @@ data class GeneratedExercise(
     val youtubeVideoId: String?
 )
 
+data class WarmupCooldownItem(
+    val name: String,
+    val durationSeconds: Int,
+    val description: String
+)
+
 data class GeneratedDay(
     val dayIndex: Int,
     val label: String,
-    val exercises: List<GeneratedExercise>
+    val exercises: List<GeneratedExercise>,
+    val warmup: List<WarmupCooldownItem> = emptyList(),
+    val cooldown: List<WarmupCooldownItem> = emptyList(),
+    val estimatedMinutes: Int = 0
 )
 
 data class GeneratedPlan(

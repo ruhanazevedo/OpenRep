@@ -1,5 +1,6 @@
 package com.ruhanazevedo.openrep.ui.screens
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,10 +14,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.AcUnit
+import androidx.compose.material.icons.filled.LocalFireDepartment
 import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material.icons.filled.SwapHoriz
+import androidx.compose.material.icons.filled.Timer
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -37,12 +42,14 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ruhanazevedo.openrep.domain.model.GeneratedExercise
 import com.ruhanazevedo.openrep.domain.model.GenerationInput
+import com.ruhanazevedo.openrep.domain.model.WarmupCooldownItem
 import com.ruhanazevedo.openrep.ui.viewmodel.GeneratedPlanUiState
 import com.ruhanazevedo.openrep.ui.viewmodel.GeneratedPlanViewModel
 
@@ -141,28 +148,86 @@ fun GeneratedPlanScreen(
 
                             Card(
                                 modifier = Modifier.fillMaxWidth(),
-                                elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                             ) {
                                 Column(modifier = Modifier.padding(12.dp)) {
-                                    Text(
-                                        day.label,
-                                        style = MaterialTheme.typography.titleMedium,
-                                        color = MaterialTheme.colorScheme.primary
-                                    )
-                                    if (muscleSubtitle.isNotEmpty()) {
-                                        Text(
-                                            muscleSubtitle,
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        horizontalArrangement = Arrangement.SpaceBetween,
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Column {
+                                            Text(
+                                                day.label,
+                                                style = MaterialTheme.typography.titleMedium,
+                                                color = MaterialTheme.colorScheme.primary
+                                            )
+                                            if (muscleSubtitle.isNotEmpty()) {
+                                                Text(
+                                                    muscleSubtitle,
+                                                    style = MaterialTheme.typography.bodySmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                )
+                                            }
+                                        }
+                                        if (day.estimatedMinutes > 0) {
+                                            Row(
+                                                modifier = Modifier
+                                                    .clip(RoundedCornerShape(6.dp))
+                                                    .background(MaterialTheme.colorScheme.surfaceContainerHigh)
+                                                    .padding(horizontal = 8.dp, vertical = 3.dp),
+                                                verticalAlignment = Alignment.CenterVertically,
+                                                horizontalArrangement = Arrangement.spacedBy(4.dp)
+                                            ) {
+                                                Icon(
+                                                    Icons.Default.Timer,
+                                                    contentDescription = null,
+                                                    modifier = Modifier.size(10.dp),
+                                                    tint = MaterialTheme.colorScheme.primary
+                                                )
+                                                Text(
+                                                    "~${day.estimatedMinutes} min",
+                                                    style = MaterialTheme.typography.labelSmall,
+                                                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                                    fontWeight = FontWeight.Medium
+                                                )
+                                            }
+                                        }
+                                    }
+
+                                    if (day.warmup.isNotEmpty()) {
+                                        Spacer(Modifier.height(12.dp))
+                                        WarmupCooldownSection(
+                                            title = "Warmup",
+                                            items = day.warmup,
+                                            tint = MaterialTheme.colorScheme.tertiary,
+                                            icon = Icons.Default.LocalFireDepartment
                                         )
                                     }
-                                    Spacer(Modifier.height(8.dp))
+
+                                    Spacer(Modifier.height(if (day.warmup.isNotEmpty()) 12.dp else 8.dp))
+                                    HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHigh)
+                                    Spacer(Modifier.height(4.dp))
+
                                     day.exercises.forEachIndexed { exIdx, exercise ->
-                                        if (exIdx > 0) HorizontalDivider()
+                                        if (exIdx > 0) HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHigh)
                                         ExerciseRow(
                                             exercise = exercise,
                                             onSwap = { viewModel.openSwapSheet(dayIdx, exIdx) },
                                             onExerciseDetail = { onExerciseDetail(exercise.exerciseId) }
+                                        )
+                                    }
+
+                                    if (day.cooldown.isNotEmpty()) {
+                                        Spacer(Modifier.height(4.dp))
+                                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHigh)
+                                        Spacer(Modifier.height(12.dp))
+                                        WarmupCooldownSection(
+                                            title = "Cooldown",
+                                            items = day.cooldown,
+                                            tint = MaterialTheme.colorScheme.primary,
+                                            icon = Icons.Default.AcUnit
                                         )
                                     }
                                 }
@@ -270,4 +335,56 @@ private fun ExerciseRow(
             }
         }
     )
+}
+
+@Composable
+private fun WarmupCooldownSection(
+    title: String,
+    items: List<WarmupCooldownItem>,
+    tint: androidx.compose.ui.graphics.Color,
+    icon: androidx.compose.ui.graphics.vector.ImageVector
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Icon(icon, contentDescription = null, modifier = Modifier.size(14.dp), tint = tint)
+            Text(
+                title,
+                style = MaterialTheme.typography.labelLarge,
+                color = tint
+            )
+        }
+        items.forEach { item ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Column(modifier = Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(item.name, style = MaterialTheme.typography.bodyMedium)
+                    Text(
+                        item.description,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                Text(
+                    formatSeconds(item.durationSeconds),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = tint,
+                    modifier = Modifier.padding(start = 8.dp, top = 2.dp)
+                )
+            }
+        }
+    }
+}
+
+private fun formatSeconds(seconds: Int): String {
+    val m = seconds / 60
+    val s = seconds % 60
+    return if (m > 0 && s > 0) "${m}m ${s}s"
+    else if (m > 0) "${m}m"
+    else "${s}s"
 }

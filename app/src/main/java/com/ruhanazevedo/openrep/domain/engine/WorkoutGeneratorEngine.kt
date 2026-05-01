@@ -8,6 +8,7 @@ import com.ruhanazevedo.openrep.domain.model.GeneratedDay
 import com.ruhanazevedo.openrep.domain.model.GeneratedExercise
 import com.ruhanazevedo.openrep.domain.model.GeneratedPlan
 import com.ruhanazevedo.openrep.domain.model.GenerationInput
+import com.ruhanazevedo.openrep.domain.model.WarmupCooldownItem
 import com.ruhanazevedo.openrep.domain.model.MuscleGroup
 import com.ruhanazevedo.openrep.domain.model.SplitType
 import kotlinx.coroutines.flow.first
@@ -38,7 +39,14 @@ class WorkoutGeneratorEngine @Inject constructor(
 
         val setsReps = setsRepsScheme(maxDiff)
 
+        // Time-aware trimming: reserve time for warmup/cooldown then cap exercises per day
+        val warmupCooldownBudgetSeconds = if (input.includeWarmupCooldown) 10 * 60 else 0
+        val availableMainSeconds = (input.sessionDurationMinutes * 60) - warmupCooldownBudgetSeconds
+        val secondsPerExercise = setsReps.first * 150 // ~2.5 min per set including rest
+        val maxExercisesPerDay = (availableMainSeconds / secondsPerExercise).coerceAtLeast(1)
+
         val sessionTemplates = buildSessionTemplates(input, equipmentFilter, equipmentList, difficultyList, setsReps)
+            .map { it.take(maxExercisesPerDay) }
 
         if (sessionTemplates.isEmpty()) {
             return GeneratedPlan(
@@ -51,10 +59,17 @@ class WorkoutGeneratorEngine @Inject constructor(
 
         val days = (0 until input.daysPerWeek).map { dayIdx ->
             val template = sessionTemplates[dayIdx % sessionTemplates.size]
+            val muscles = template.map { it.targetMuscle }.distinct()
+            val warmup = if (input.includeWarmupCooldown) buildWarmup(muscles) else emptyList()
+            val cooldown = if (input.includeWarmupCooldown) buildCooldown(muscles) else emptyList()
+            val estimatedMinutes = estimateMinutes(template, warmup, cooldown)
             GeneratedDay(
                 dayIndex = dayIdx,
                 label = "Day ${dayIdx + 1}",
-                exercises = template
+                exercises = template,
+                warmup = warmup,
+                cooldown = cooldown,
+                estimatedMinutes = estimatedMinutes
             )
         }
 
@@ -275,4 +290,150 @@ class WorkoutGeneratorEngine @Inject constructor(
             reps = setsReps.second,
             youtubeVideoId = youtubeVideoId
         )
+
+    // ── Warmup & Cooldown ────────────────────────────────────────────────────
+
+    private fun buildWarmup(muscles: List<String>): List<WarmupCooldownItem> {
+        val seen = mutableSetOf<String>()
+        val result = mutableListOf<WarmupCooldownItem>()
+        if (MuscleGroup.FULL_BODY in muscles) {
+            warmupByMuscle[MuscleGroup.FULL_BODY]?.take(2)?.forEach { if (seen.add(it.name)) result.add(it) }
+        }
+        for (muscle in muscles.filter { it != MuscleGroup.FULL_BODY }) {
+            warmupByMuscle[muscle]?.take(2)?.forEach { if (seen.add(it.name)) result.add(it) }
+            if (result.size >= 5) break
+        }
+        if (result.isEmpty()) warmupByMuscle[MuscleGroup.FULL_BODY]?.forEach { result.add(it) }
+        return result.take(5)
+    }
+
+    private fun buildCooldown(muscles: List<String>): List<WarmupCooldownItem> {
+        val seen = mutableSetOf<String>()
+        val result = mutableListOf<WarmupCooldownItem>()
+        for (muscle in muscles) {
+            cooldownByMuscle[muscle]?.take(2)?.forEach { if (seen.add(it.name)) result.add(it) }
+            if (result.size >= 4) break
+        }
+        val breathing = WarmupCooldownItem("Deep Breathing", 60, "Inhale 4s, hold 4s, exhale 6s — 5 cycles")
+        if (seen.add(breathing.name)) result.add(breathing)
+        return result.take(5)
+    }
+
+    private fun estimateMinutes(
+        exercises: List<GeneratedExercise>,
+        warmup: List<WarmupCooldownItem>,
+        cooldown: List<WarmupCooldownItem>
+    ): Int {
+        val avgSets = exercises.firstOrNull()?.sets ?: 4
+        val mainSeconds = exercises.size * avgSets * 150
+        val warmupSeconds = warmup.sumOf { it.durationSeconds }
+        val cooldownSeconds = cooldown.sumOf { it.durationSeconds }
+        return ((mainSeconds + warmupSeconds + cooldownSeconds) / 60).coerceAtLeast(1)
+    }
+
+    private val warmupByMuscle = mapOf(
+        MuscleGroup.CHEST to listOf(
+            WarmupCooldownItem("Arm Circles", 45, "10 large circles forward and backward"),
+            WarmupCooldownItem("Band Pull-Aparts", 45, "15 reps to open the chest"),
+            WarmupCooldownItem("Light Push-Ups", 30, "10 slow reps to activate the chest")
+        ),
+        MuscleGroup.BACK to listOf(
+            WarmupCooldownItem("Cat-Cow Stretch", 45, "10 reps, focus on thoracic extension"),
+            WarmupCooldownItem("Arm Swings", 30, "Cross-body swings ×15 each direction"),
+            WarmupCooldownItem("Band Rows", 45, "15 light reps to activate lats")
+        ),
+        MuscleGroup.SHOULDERS to listOf(
+            WarmupCooldownItem("Shoulder Circles", 30, "10 circles forward, 10 backward"),
+            WarmupCooldownItem("Band Pull-Aparts", 45, "15 reps at shoulder height"),
+            WarmupCooldownItem("Cross-Arm Dynamic Stretch", 30, "15 swings across the body")
+        ),
+        MuscleGroup.BICEPS to listOf(
+            WarmupCooldownItem("Wrist Circles", 30, "10 circles each direction"),
+            WarmupCooldownItem("Arm Swings", 30, "Elbow bends to loosen the joint"),
+            WarmupCooldownItem("Light Band Curls", 30, "15 reps with minimal resistance")
+        ),
+        MuscleGroup.TRICEPS to listOf(
+            WarmupCooldownItem("Overhead Dynamic Stretch", 30, "5 dynamic reaches each arm"),
+            WarmupCooldownItem("Wrist Circles", 30, "10 circles to warm the elbow"),
+            WarmupCooldownItem("Light Pushdowns", 30, "15 reps with band or cable")
+        ),
+        MuscleGroup.QUADS to listOf(
+            WarmupCooldownItem("Leg Swings (Forward)", 45, "15 swings each leg"),
+            WarmupCooldownItem("Walking Lunges", 45, "10 reps each side, bodyweight"),
+            WarmupCooldownItem("Bodyweight Squats", 45, "15 slow reps with full depth")
+        ),
+        MuscleGroup.HAMSTRINGS to listOf(
+            WarmupCooldownItem("Leg Swings (Side)", 45, "15 swings each leg"),
+            WarmupCooldownItem("Hip Hinges", 45, "10 slow RDL-style hinges"),
+            WarmupCooldownItem("Inchworm", 45, "5 reps, walk hands out to plank")
+        ),
+        MuscleGroup.GLUTES to listOf(
+            WarmupCooldownItem("Hip Circles", 30, "10 circles each direction"),
+            WarmupCooldownItem("Glute Bridges", 45, "15 bodyweight reps"),
+            WarmupCooldownItem("Clamshells", 30, "15 reps each side")
+        ),
+        MuscleGroup.CALVES to listOf(
+            WarmupCooldownItem("Ankle Circles", 30, "10 circles each direction"),
+            WarmupCooldownItem("Calf Raises", 45, "20 bodyweight reps"),
+            WarmupCooldownItem("Jump Rope (Light)", 60, "60 seconds easy pace")
+        ),
+        MuscleGroup.CORE to listOf(
+            WarmupCooldownItem("Dead Bugs", 45, "5 reps each side, slow and controlled"),
+            WarmupCooldownItem("Bird Dogs", 45, "5 reps each side"),
+            WarmupCooldownItem("Hip Flexor March", 45, "Dynamic lunge walks ×10 each")
+        ),
+        MuscleGroup.FULL_BODY to listOf(
+            WarmupCooldownItem("Jumping Jacks", 60, "50 reps to elevate heart rate"),
+            WarmupCooldownItem("High Knees", 45, "30 seconds each"),
+            WarmupCooldownItem("Dynamic Full-Body Stretch", 60, "Arm swings, leg swings, torso rotations")
+        )
+    )
+
+    private val cooldownByMuscle = mapOf(
+        MuscleGroup.CHEST to listOf(
+            WarmupCooldownItem("Doorway Chest Stretch", 30, "Hold 30s, feel the stretch across pecs"),
+            WarmupCooldownItem("Cross-Arm Stretch", 30, "Hold 30s each side")
+        ),
+        MuscleGroup.BACK to listOf(
+            WarmupCooldownItem("Child's Pose", 45, "Hold 45s, arms extended overhead"),
+            WarmupCooldownItem("Seated Spinal Twist", 30, "Hold 30s each side")
+        ),
+        MuscleGroup.SHOULDERS to listOf(
+            WarmupCooldownItem("Cross-Arm Shoulder Stretch", 30, "Hold 30s each side"),
+            WarmupCooldownItem("Overhead Tricep Stretch", 30, "Hold 30s each arm")
+        ),
+        MuscleGroup.BICEPS to listOf(
+            WarmupCooldownItem("Wrist Flexor Stretch", 30, "Arm out palm up, gently press fingers down"),
+            WarmupCooldownItem("Bicep Wall Stretch", 30, "Place palm on wall, rotate body away")
+        ),
+        MuscleGroup.TRICEPS to listOf(
+            WarmupCooldownItem("Overhead Tricep Stretch", 30, "Hold 30s each arm"),
+            WarmupCooldownItem("Cross-Body Arm Stretch", 30, "Hold 30s each side")
+        ),
+        MuscleGroup.QUADS to listOf(
+            WarmupCooldownItem("Standing Quad Stretch", 30, "Hold 30s each leg"),
+            WarmupCooldownItem("Kneeling Hip Flexor Stretch", 45, "Hold 45s each side")
+        ),
+        MuscleGroup.HAMSTRINGS to listOf(
+            WarmupCooldownItem("Seated Hamstring Stretch", 45, "Hold 45s each leg"),
+            WarmupCooldownItem("Standing Forward Fold", 45, "Hold 45s, slight knee bend ok")
+        ),
+        MuscleGroup.GLUTES to listOf(
+            WarmupCooldownItem("Figure-4 Stretch", 45, "Hold 45s each side"),
+            WarmupCooldownItem("Pigeon Pose", 45, "Hold 45s each side")
+        ),
+        MuscleGroup.CALVES to listOf(
+            WarmupCooldownItem("Standing Calf Stretch", 30, "Hold 30s each leg against wall"),
+            WarmupCooldownItem("Downward Dog", 45, "Hold 45s, pedal heels alternately")
+        ),
+        MuscleGroup.CORE to listOf(
+            WarmupCooldownItem("Cobra Stretch", 30, "Hold 30s, decompress the spine"),
+            WarmupCooldownItem("Knee-to-Chest Stretch", 30, "Hold 30s each side")
+        ),
+        MuscleGroup.FULL_BODY to listOf(
+            WarmupCooldownItem("Full-Body Static Stretch", 120, "2 min of progressive head-to-toe stretching"),
+            WarmupCooldownItem("Deep Breathing", 60, "Inhale 4s, hold 4s, exhale 6s — 5 cycles")
+        )
+    )
 }
+

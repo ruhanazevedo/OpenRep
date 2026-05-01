@@ -18,6 +18,8 @@ data class GenerateFilterUiState(
     val selectedMuscleGroups: Set<String> = emptySet(),
     val splitType: SplitType = SplitType.A,
     val exercisesPerMuscle: Int = 3,
+    val sessionDurationMinutes: Int = 60,
+    val includeWarmupCooldown: Boolean = true,
     val isLoaded: Boolean = false
 )
 
@@ -66,6 +68,14 @@ class GenerateFilterViewModel @Inject constructor(
         _uiState.value = _uiState.value.copy(splitType = split)
     }
 
+    fun setSessionDuration(minutes: Int) {
+        _uiState.value = _uiState.value.copy(sessionDurationMinutes = minutes.coerceIn(15, 120))
+    }
+
+    fun setIncludeWarmupCooldown(include: Boolean) {
+        _uiState.value = _uiState.value.copy(includeWarmupCooldown = include)
+    }
+
     fun buildGenerationInput(): GenerationInput {
         val state = _uiState.value
         viewModelScope.launch {
@@ -82,7 +92,9 @@ class GenerateFilterViewModel @Inject constructor(
             daysPerWeek = state.daysPerWeek,
             muscleGroups = state.selectedMuscleGroups.toList(),
             splitType = state.splitType,
-            exercisesPerMuscle = state.exercisesPerMuscle
+            exercisesPerMuscle = state.exercisesPerMuscle,
+            sessionDurationMinutes = state.sessionDurationMinutes,
+            includeWarmupCooldown = state.includeWarmupCooldown
         )
     }
 }
