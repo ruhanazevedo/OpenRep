@@ -9,3 +9,5 @@
 .cxx
 local.properties
 PRD.md
+.claude/
+brain/
