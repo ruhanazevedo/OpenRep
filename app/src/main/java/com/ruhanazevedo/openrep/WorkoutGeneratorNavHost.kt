@@ -89,12 +89,23 @@ fun WorkoutGeneratorNavHost() {
             }
         }
     ) { innerPadding ->
+        val tabRoutes = bottomNavItems.map { it.screen.route }
         NavHost(
             navController = navController,
             startDestination = Screen.History.route,
             modifier = Modifier.padding(innerPadding),
-            enterTransition = { slideInHorizontally(initialOffsetX = { it }) },
-            exitTransition = { slideOutHorizontally(targetOffsetX = { -it / 3 }) },
+            enterTransition = {
+                val from = tabRoutes.indexOf(initialState.destination.route)
+                val to = tabRoutes.indexOf(targetState.destination.route)
+                val dir = if (from >= 0 && to >= 0 && to < from) -1 else 1
+                slideInHorizontally(initialOffsetX = { it * dir })
+            },
+            exitTransition = {
+                val from = tabRoutes.indexOf(initialState.destination.route)
+                val to = tabRoutes.indexOf(targetState.destination.route)
+                val dir = if (from >= 0 && to >= 0 && to < from) -1 else 1
+                slideOutHorizontally(targetOffsetX = { -it / 3 * dir })
+            },
             popEnterTransition = { slideInHorizontally(initialOffsetX = { -it / 3 }) },
             popExitTransition = { slideOutHorizontally(targetOffsetX = { it }) }
         ) {
