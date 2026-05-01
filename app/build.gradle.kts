@@ -97,6 +97,7 @@ dependencies {
     ksp(libs.moshi.kotlin.codegen)
     implementation(libs.okhttp.logging)
     implementation(libs.androidx.browser)
+    implementation(libs.compose.ui.google.fonts)
 
     // Testing
     testImplementation(libs.junit)

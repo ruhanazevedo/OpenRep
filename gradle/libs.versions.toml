@@ -21,6 +21,7 @@ okhttp = "4.12.0"
 robolectric = "4.13"
 androidYouTubePlayer = "12.1.1"
 browser = "1.8.0"
+googleFonts = "1.7.6"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -67,6 +68,8 @@ lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-ru
 robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 # Chrome Custom Tabs
 androidx-browser = { group = "androidx.browser", name = "browser", version.ref = "browser" }
+# Google Fonts
+compose-ui-google-fonts = { group = "androidx.compose.ui", name = "ui-text-google-fonts", version.ref = "googleFonts" }
 # YouTube Player
 android-youtube-player = { group = "com.pierfrancescosoffritti.androidyoutubeplayer", name = "core", version.ref = "androidYouTubePlayer" }
 
