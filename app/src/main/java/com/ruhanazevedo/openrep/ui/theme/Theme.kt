@@ -59,7 +59,7 @@ private val DarkColorScheme = darkColorScheme(
 )
 
 @Composable
-fun WorkoutGeneratorTheme(
+fun OpenRepTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {

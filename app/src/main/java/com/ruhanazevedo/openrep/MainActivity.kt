@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.ruhanazevedo.openrep.data.repository.PreferencesRepository
-import com.ruhanazevedo.openrep.ui.theme.WorkoutGeneratorTheme
+import com.ruhanazevedo.openrep.ui.theme.OpenRepTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                 initialValue = null
             )
             val isDarkMode = prefs?.isDarkMode ?: initialDarkMode
-            WorkoutGeneratorTheme(darkTheme = isDarkMode) {
+            OpenRepTheme(darkTheme = isDarkMode) {
                 WorkoutGeneratorNavHost()
             }
         }

@@ -49,7 +49,7 @@ fun PlanDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Plan Detail") },
+                title = { Text(state.plan?.plan?.name ?: "Plan Detail") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")

@@ -14,7 +14,7 @@ data class BottomNavItem(
 )
 
 val bottomNavItems = listOf(
-    BottomNavItem("Workout", Icons.Default.History, Screen.History),
+    BottomNavItem("History", Icons.Default.History, Screen.History),
     BottomNavItem("Library", Icons.Default.List, Screen.Library),
     BottomNavItem("Generate", Icons.Default.FitnessCenter, Screen.Generate),
     BottomNavItem("Settings", Icons.Default.Settings, Screen.Settings),

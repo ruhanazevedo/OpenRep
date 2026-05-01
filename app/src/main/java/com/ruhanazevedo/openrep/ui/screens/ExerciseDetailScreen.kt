@@ -168,13 +168,20 @@ fun ExerciseDetailScreen(
             Spacer(Modifier.height(12.dp))
 
             DetailLabel("Instructions")
-            OutlinedTextField(
-                value = editableInstructions,
-                onValueChange = { editableInstructions = it },
-                modifier = Modifier.fillMaxWidth(),
-                minLines = 3,
-                enabled = exercise.isCustom
-            )
+            if (exercise.isCustom) {
+                OutlinedTextField(
+                    value = editableInstructions,
+                    onValueChange = { editableInstructions = it },
+                    modifier = Modifier.fillMaxWidth(),
+                    minLines = 3
+                )
+            } else {
+                Text(
+                    text = exercise.instructions,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
             Spacer(Modifier.height(4.dp))
             if (exercise.isCustom) {
                 TextButton(
