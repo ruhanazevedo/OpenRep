@@ -275,9 +275,9 @@ class WorkoutGeneratorEngine @Inject constructor(
     }
 
     private fun setsRepsScheme(maxDifficulty: Difficulty): Pair<Int, Int> = when (maxDifficulty) {
-        Difficulty.Beginner -> 3 to 12
+        Difficulty.Beginner     -> 3 to 12
         Difficulty.Intermediate -> 4 to 10
-        Difficulty.Advanced -> 5 to 5
+        Difficulty.Advanced     -> 4 to 8
     }
 
     private fun ExerciseEntity.toGeneratedExercise(targetMuscle: String, setsReps: Pair<Int, Int>) =
