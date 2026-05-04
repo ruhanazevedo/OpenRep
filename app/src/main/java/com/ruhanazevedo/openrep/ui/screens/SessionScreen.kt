@@ -3,6 +3,7 @@ package com.ruhanazevedo.openrep.ui.screens
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -25,6 +26,8 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.ExpandLess
+import androidx.compose.material.icons.filled.ExpandMore
 import androidx.compose.material.icons.filled.RadioButtonUnchecked
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -53,6 +56,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -337,121 +341,106 @@ fun SessionScreen(
 
                         Card(
                             modifier = Modifier.fillMaxWidth(),
-                            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+                            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                         ) {
                             Column {
+                                // ── Header row (tap to expand) ─────────────────────
                                 Row(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                                        .clickable { viewModel.toggleExpand(planExerciseId) }
+                                        .padding(horizontal = 16.dp, vertical = 14.dp),
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    val images = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
-                                    val imageUrl = images.firstOrNull()
-                                    if (imageUrl != null) {
-                                        AsyncImage(
-                                            model = imageUrl,
-                                            contentDescription = null,
-                                            contentScale = ContentScale.Crop,
-                                            modifier = Modifier
-                                                .size(56.dp)
-                                                .clip(RoundedCornerShape(8.dp))
-                                        )
-                                        Spacer(Modifier.width(12.dp))
-                                    }
-                                    Column(
+                                    // Completion indicator / set count circle
+                                    Box(
                                         modifier = Modifier
-                                            .weight(1f)
-                                            .clickable { viewModel.toggleExpand(planExerciseId) }
+                                            .size(40.dp)
+                                            .clip(RoundedCornerShape(20.dp))
+                                            .background(
+                                                if (isCompleted) MaterialTheme.colorScheme.primary.copy(alpha = 0.15f)
+                                                else MaterialTheme.colorScheme.surfaceContainerHigh
+                                            ),
+                                        contentAlignment = Alignment.Center
                                     ) {
-                                        Text(
-                                            exercise.exerciseName,
-                                            style = MaterialTheme.typography.titleSmall,
-                                            modifier = Modifier.clickable { onExerciseDetail(exercise.exerciseId) }
-                                        )
-                                        if (exercise.targetMuscle.isNotBlank()) {
+                                        if (isCompleted) {
+                                            Icon(
+                                                Icons.Default.CheckCircle,
+                                                contentDescription = null,
+                                                tint = MaterialTheme.colorScheme.primary,
+                                                modifier = Modifier.size(22.dp)
+                                            )
+                                        } else {
                                             Text(
-                                                exercise.targetMuscle,
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.primary
+                                                "${exState.loggedSets.size}/${exercise.setsTarget}",
+                                                style = MaterialTheme.typography.labelSmall,
+                                                fontWeight = FontWeight.Bold,
+                                                color = MaterialTheme.colorScheme.onSurfaceVariant
                                             )
                                         }
+                                    }
+                                    Spacer(Modifier.width(12.dp))
+                                    Column(modifier = Modifier.weight(1f)) {
                                         Text(
-                                            "${exState.loggedSets.size}/${exercise.setsTarget} sets",
+                                            exercise.exerciseName,
+                                            style = MaterialTheme.typography.bodyLarge,
+                                            fontWeight = FontWeight.SemiBold,
+                                            color = if (isCompleted) MaterialTheme.colorScheme.onSurfaceVariant
+                                                    else MaterialTheme.colorScheme.onSurface
+                                        )
+                                        Text(
+                                            "${exercise.setsTarget} sets × ${exercise.repsTarget} reps",
                                             style = MaterialTheme.typography.bodySmall,
                                             color = MaterialTheme.colorScheme.onSurfaceVariant
                                         )
                                     }
-                                    IconButton(
-                                        onClick = { viewModel.quickComplete(planExerciseId) },
-                                        enabled = !isCompleted
-                                    ) {
-                                        Icon(
-                                            if (isCompleted) Icons.Default.CheckCircle else Icons.Default.RadioButtonUnchecked,
-                                            contentDescription = if (isCompleted) "Completed" else "Quick complete",
-                                            tint = if (isCompleted) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant
-                                        )
-                                    }
+                                    Icon(
+                                        if (exState.isExpanded) Icons.Default.ExpandLess else Icons.Default.ExpandMore,
+                                        contentDescription = null,
+                                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                        modifier = Modifier.size(20.dp)
+                                    )
                                 }
 
+                                // ── Expanded: set logging ──────────────────────────
                                 AnimatedVisibility(visible = exState.isExpanded) {
                                     Column(
                                         modifier = Modifier
-                                            .padding(horizontal = 16.dp)
-                                            .padding(bottom = 16.dp),
-                                        verticalArrangement = Arrangement.spacedBy(8.dp)
+                                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                                        verticalArrangement = Arrangement.spacedBy(12.dp)
                                     ) {
-                                        val expandedImages = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
-                                        if (expandedImages.isNotEmpty()) {
-                                            var currentImageIndex by remember(exercise.exerciseId) { mutableIntStateOf(0) }
-
-                                            LaunchedEffect(exercise.exerciseId) {
-                                                if (expandedImages.size > 1) {
-                                                    while (true) {
-                                                        delay(500L)
-                                                        currentImageIndex = (currentImageIndex + 1) % expandedImages.size
-                                                    }
-                                                }
-                                            }
-
-                                            Crossfade(
-                                                targetState = currentImageIndex,
-                                                animationSpec = tween(durationMillis = 300),
-                                                label = "exercise_image_slide"
-                                            ) { index ->
-                                                AsyncImage(
-                                                    model = expandedImages[index],
-                                                    contentDescription = "Exercise image",
-                                                    contentScale = ContentScale.Crop,
-                                                    modifier = Modifier
-                                                        .fillMaxWidth()
-                                                        .height(180.dp)
-                                                        .clip(RoundedCornerShape(8.dp))
-                                                )
-                                            }
-                                            Spacer(Modifier.height(8.dp))
-                                        }
-
-                                        if (exercise.instructions.isNotBlank()) {
-                                            Text(
-                                                exercise.instructions,
-                                                style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                                            )
-                                        }
+                                        HorizontalDivider(color = MaterialTheme.colorScheme.surfaceContainerHigh)
 
                                         if (exercise.exerciseType == ExerciseType.STRENGTH) {
                                             if (isCompleted) {
-                                                Text(
-                                                    "Completed",
-                                                    style = MaterialTheme.typography.labelMedium,
-                                                    color = MaterialTheme.colorScheme.primary
-                                                )
+                                                // Logged sets summary
+                                                exState.loggedSets.forEach { set ->
+                                                    val weightStr = if ((set.weightKg ?: 0f) > 0f) " @ ${set.weightKg}kg" else ""
+                                                    Row(
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        horizontalArrangement = Arrangement.SpaceBetween
+                                                    ) {
+                                                        Text(
+                                                            "Set ${set.setNumber}",
+                                                            style = MaterialTheme.typography.labelMedium,
+                                                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                        )
+                                                        Text(
+                                                            "${set.repsCompleted} reps$weightStr",
+                                                            style = MaterialTheme.typography.labelMedium,
+                                                            color = MaterialTheme.colorScheme.primary,
+                                                            fontWeight = FontWeight.Medium
+                                                        )
+                                                    }
+                                                }
                                             } else {
+                                                // Current set prompt
                                                 Text(
-                                                    "Set ${exState.currentSetNumber} of ${exercise.setsTarget} — target ${exercise.repsTarget} reps",
-                                                    style = MaterialTheme.typography.labelMedium,
-                                                    color = MaterialTheme.colorScheme.primary
+                                                    "Set ${exState.currentSetNumber} of ${exercise.setsTarget}",
+                                                    style = MaterialTheme.typography.labelLarge,
+                                                    color = MaterialTheme.colorScheme.primary,
+                                                    fontWeight = FontWeight.SemiBold
                                                 )
 
                                                 Row(
@@ -478,6 +467,30 @@ fun SessionScreen(
                                                     )
                                                 }
 
+                                                // Previous logged sets (compact)
+                                                if (exState.loggedSets.isNotEmpty()) {
+                                                    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                                                        exState.loggedSets.forEach { set ->
+                                                            val weightStr = if ((set.weightKg ?: 0f) > 0f) " @ ${set.weightKg}kg" else ""
+                                                            Row(
+                                                                modifier = Modifier.fillMaxWidth(),
+                                                                horizontalArrangement = Arrangement.SpaceBetween
+                                                            ) {
+                                                                Text(
+                                                                    "Set ${set.setNumber}",
+                                                                    style = MaterialTheme.typography.labelSmall,
+                                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                                )
+                                                                Text(
+                                                                    "${set.repsCompleted} reps$weightStr",
+                                                                    style = MaterialTheme.typography.labelSmall,
+                                                                    color = MaterialTheme.colorScheme.primary
+                                                                )
+                                                            }
+                                                        }
+                                                    }
+                                                }
+
                                                 Button(
                                                     onClick = {
                                                         haptic.performHapticFeedback(HapticFeedbackType.LongPress)
@@ -486,22 +499,11 @@ fun SessionScreen(
                                                     modifier = Modifier.fillMaxWidth(),
                                                     enabled = exState.repsInput.trim().toIntOrNull() != null
                                                 ) {
-                                                    Text("Log Set")
-                                                }
-                                            }
-
-                                            if (exState.loggedSets.isNotEmpty()) {
-                                                Text("Logged sets:", style = MaterialTheme.typography.labelMedium)
-                                                exState.loggedSets.forEach { set ->
-                                                    val weightStr = if ((set.weightKg ?: 0f) > 0f) "${set.weightKg}kg" else "bodyweight"
-                                                    Text(
-                                                        "Set ${set.setNumber}: ${set.repsCompleted} reps @ $weightStr",
-                                                        style = MaterialTheme.typography.bodySmall,
-                                                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                                                    )
+                                                    Text("Log Set ${exState.currentSetNumber}")
                                                 }
                                             }
                                         } else {
+                                            // Timed exercise
                                             val duration = exercise.durationSeconds ?: 60
                                             when {
                                                 exState.timerRunning -> {
@@ -513,9 +515,7 @@ fun SessionScreen(
                                                     OutlinedButton(
                                                         onClick = { viewModel.stopExerciseTimer(planExerciseId) },
                                                         modifier = Modifier.fillMaxWidth()
-                                                    ) {
-                                                        Text("Pause")
-                                                    }
+                                                    ) { Text("Pause") }
                                                 }
                                                 isCompleted -> {
                                                     Text(
@@ -533,9 +533,7 @@ fun SessionScreen(
                                                     Button(
                                                         onClick = { viewModel.startExerciseTimer(planExerciseId) },
                                                         modifier = Modifier.fillMaxWidth()
-                                                    ) {
-                                                        Text("Start Timer")
-                                                    }
+                                                    ) { Text("Start Timer") }
                                                 }
                                             }
                                         }
@@ -544,7 +542,6 @@ fun SessionScreen(
                             }
                         }
                     }
-
                     Spacer(Modifier.height(8.dp))
 
                     Button(
