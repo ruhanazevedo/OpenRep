@@ -490,15 +490,21 @@ fun SessionScreen(
                                             .weight(1f)
                                             .padding(start = 14.dp, end = 14.dp, top = 14.dp, bottom = 14.dp)
                                     ) {
-                                        // Exercise image slideshow
+                                        // Exercise image slideshow — tap to start, scrolls off screen to stop
                                         val exerciseImages = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
                                         if (exerciseImages.isNotEmpty()) {
                                             var imageIndex by remember(exercise.exerciseId) { mutableIntStateOf(0) }
-                                            var imageVisible by remember(exercise.exerciseId) { mutableStateOf(false) }
-                                            LaunchedEffect(exercise.exerciseId, imageVisible) {
-                                                if (imageVisible && exerciseImages.size > 1) {
+                                            var isSliding by remember(exercise.exerciseId) { mutableStateOf(false) }
+
+                                            // Stop sliding when image leaves the viewport
+                                            val onVisibilityChanged = { visible: Boolean ->
+                                                if (!visible) isSliding = false
+                                            }
+
+                                            LaunchedEffect(exercise.exerciseId, isSliding) {
+                                                if (isSliding && exerciseImages.size > 1) {
                                                     while (true) {
-                                                        delay(600L)
+                                                        delay(700L)
                                                         imageIndex = (imageIndex + 1) % exerciseImages.size
                                                     }
                                                 }
@@ -516,10 +522,12 @@ fun SessionScreen(
                                                         .fillMaxWidth()
                                                         .height(140.dp)
                                                         .clip(RoundedCornerShape(8.dp))
+                                                        .clickable { if (exerciseImages.size > 1) isSliding = !isSliding }
                                                         .onGloballyPositioned { coords ->
                                                             val topY = coords.positionInRoot().y
                                                             val bottomY = topY + coords.size.height
-                                                            imageVisible = topY >= 0f && bottomY <= screenHeightPx
+                                                            val visible = topY >= 0f && bottomY <= screenHeightPx
+                                                            onVisibilityChanged(visible)
                                                         }
                                                 )
                                             }
