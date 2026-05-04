@@ -52,11 +52,14 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInRoot
 import coil.compose.AsyncImage
 import kotlinx.coroutines.delay
 import androidx.compose.ui.platform.LocalHapticFeedback
@@ -376,11 +379,16 @@ fun SessionScreen(
                     (state.exerciseStates[ex.planExercise.id] ?: ExerciseSessionState()).loggedSets.size >= ex.setsTarget
                 }
 
+                val scrollState = rememberScrollState()
+                val screenHeightPx = with(androidx.compose.ui.platform.LocalDensity.current) {
+                    LocalConfiguration.current.screenHeightDp.dp.toPx()
+                }
+
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding)
-                        .verticalScroll(rememberScrollState())
+                        .verticalScroll(scrollState)
                 ) {
                     // ── Progress header ───────────────────────────────
                     Column(modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)) {
@@ -486,8 +494,9 @@ fun SessionScreen(
                                         val exerciseImages = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
                                         if (exerciseImages.isNotEmpty()) {
                                             var imageIndex by remember(exercise.exerciseId) { mutableIntStateOf(0) }
-                                            LaunchedEffect(exercise.exerciseId) {
-                                                if (exerciseImages.size > 1) {
+                                            var imageVisible by remember(exercise.exerciseId) { mutableStateOf(false) }
+                                            LaunchedEffect(exercise.exerciseId, imageVisible) {
+                                                if (imageVisible && exerciseImages.size > 1) {
                                                     while (true) {
                                                         delay(600L)
                                                         imageIndex = (imageIndex + 1) % exerciseImages.size
@@ -507,6 +516,11 @@ fun SessionScreen(
                                                         .fillMaxWidth()
                                                         .height(140.dp)
                                                         .clip(RoundedCornerShape(8.dp))
+                                                        .onGloballyPositioned { coords ->
+                                                            val topY = coords.positionInRoot().y
+                                                            val bottomY = topY + coords.size.height
+                                                            imageVisible = topY >= 0f && bottomY <= screenHeightPx
+                                                        }
                                                 )
                                             }
                                             Spacer(Modifier.height(10.dp))
