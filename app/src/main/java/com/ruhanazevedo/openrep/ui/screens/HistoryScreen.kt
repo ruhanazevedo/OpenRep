@@ -18,22 +18,31 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarToday
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.FitnessCenter
 import androidx.compose.material.icons.filled.History
 import androidx.compose.material.icons.filled.Timer
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,6 +72,27 @@ fun HistoryScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     var selectedTab by remember { mutableIntStateOf(0) }
     val tabs = listOf("Plans", "Sessions")
+    var planToDelete by remember { mutableStateOf<WorkoutPlanEntity?>(null) }
+
+    if (planToDelete != null) {
+        AlertDialog(
+            onDismissRequest = { planToDelete = null },
+            title = { Text("Delete plan?") },
+            text = { Text("\"${planToDelete!!.name}\" will be permanently deleted.") },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        viewModel.deletePlan(planToDelete!!.id)
+                        planToDelete = null
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error)
+                ) { Text("Delete") }
+            },
+            dismissButton = {
+                TextButton(onClick = { planToDelete = null }) { Text("Cancel") }
+            }
+        )
+    }
 
     Scaffold(
         topBar = {
@@ -85,15 +115,20 @@ fun HistoryScreen(
             }
 
             when (selectedTab) {
-                0 -> PlansTab(plans = uiState.plans, onPlanClick = onPlanClick)
+                0 -> PlansTab(plans = uiState.plans, onPlanClick = onPlanClick, onDeleteRequest = { planToDelete = it })
                 1 -> SessionsTab(sessions = uiState.sessions, onSessionClick = onSessionDetailClick)
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun PlansTab(plans: List<WorkoutPlanEntity>, onPlanClick: (String) -> Unit) {
+private fun PlansTab(
+    plans: List<WorkoutPlanEntity>,
+    onPlanClick: (String) -> Unit,
+    onDeleteRequest: (WorkoutPlanEntity) -> Unit
+) {
     if (plans.isEmpty()) {
         EmptyState(
             icon = Icons.Default.FitnessCenter,
@@ -108,8 +143,41 @@ private fun PlansTab(plans: List<WorkoutPlanEntity>, onPlanClick: (String) -> Un
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             item { Spacer(Modifier.height(4.dp)) }
-            items(plans) { plan ->
-                PlanCard(plan = plan, onClick = { onPlanClick(plan.id) })
+            items(plans, key = { it.id }) { plan ->
+                val dismissState = rememberSwipeToDismissBoxState(
+                    confirmValueChange = { value ->
+                        if (value == SwipeToDismissBoxValue.EndToStart) {
+                            onDeleteRequest(plan)
+                        }
+                        false // never auto-dismiss; dialog handles it
+                    }
+                )
+                SwipeToDismissBox(
+                    state = dismissState,
+                    enableDismissFromStartToEnd = false,
+                    backgroundContent = {
+                        val triggered = dismissState.dismissDirection == SwipeToDismissBoxValue.EndToStart
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .clip(RoundedCornerShape(12.dp))
+                                .background(
+                                    if (triggered) MaterialTheme.colorScheme.errorContainer
+                                    else MaterialTheme.colorScheme.surfaceContainer
+                                ),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            Icon(
+                                Icons.Default.Delete,
+                                contentDescription = "Delete",
+                                tint = MaterialTheme.colorScheme.onErrorContainer,
+                                modifier = Modifier.padding(end = 24.dp).size(24.dp)
+                            )
+                        }
+                    }
+                ) {
+                    PlanCard(plan = plan, onClick = { onPlanClick(plan.id) })
+                }
             }
             item { Spacer(Modifier.height(8.dp)) }
         }

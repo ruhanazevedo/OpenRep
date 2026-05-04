@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 data class SessionSummary(
@@ -34,6 +35,8 @@ class HistoryViewModel @Inject constructor(
     workoutSessionDao: WorkoutSessionDao,
     private val sessionSetDao: SessionSetDao
 ) : ViewModel() {
+
+    private val _workoutPlanDao = workoutPlanDao
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val uiState: StateFlow<HistoryUiState> = combine(
@@ -59,4 +62,8 @@ class HistoryViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5_000),
             initialValue = HistoryUiState()
         )
+
+    fun deletePlan(planId: String) {
+        viewModelScope.launch { _workoutPlanDao.delete(planId) }
+    }
 }
