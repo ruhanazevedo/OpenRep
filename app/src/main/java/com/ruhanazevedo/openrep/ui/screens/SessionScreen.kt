@@ -1,5 +1,7 @@
 package com.ruhanazevedo.openrep.ui.screens
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -43,10 +45,16 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.layout.ContentScale
+import coil.compose.AsyncImage
+import kotlinx.coroutines.delay
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -441,6 +449,36 @@ fun SessionScreen(
                                             .weight(1f)
                                             .padding(start = 14.dp, end = 14.dp, top = 14.dp, bottom = 14.dp)
                                     ) {
+                                        // Exercise image slideshow
+                                        val exerciseImages = state.exerciseImages[exercise.exerciseName.lowercase()] ?: emptyList()
+                                        if (exerciseImages.isNotEmpty()) {
+                                            var imageIndex by remember(exercise.exerciseId) { mutableIntStateOf(0) }
+                                            LaunchedEffect(exercise.exerciseId) {
+                                                if (exerciseImages.size > 1) {
+                                                    while (true) {
+                                                        delay(600L)
+                                                        imageIndex = (imageIndex + 1) % exerciseImages.size
+                                                    }
+                                                }
+                                            }
+                                            Crossfade(
+                                                targetState = imageIndex,
+                                                animationSpec = tween(durationMillis = 300),
+                                                label = "exercise_img"
+                                            ) { idx ->
+                                                AsyncImage(
+                                                    model = exerciseImages[idx],
+                                                    contentDescription = exercise.exerciseName,
+                                                    contentScale = ContentScale.Crop,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(140.dp)
+                                                        .clip(RoundedCornerShape(8.dp))
+                                                )
+                                            }
+                                            Spacer(Modifier.height(10.dp))
+                                        }
+
                                         // Header: name + status badge
                                         Row(
                                             modifier = Modifier.fillMaxWidth(),
