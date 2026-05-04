@@ -587,35 +587,55 @@ fun SessionScreen(
                                                 Spacer(Modifier.height(6.dp))
                                                 exState.loggedSets.forEach { set ->
                                                     val weightStr = if ((set.weightKg ?: 0f) > 0f) " · ${set.weightKg}kg" else ""
-                                                    Row(
-                                                        modifier = Modifier
-                                                            .fillMaxWidth()
-                                                            .padding(vertical = 3.dp),
-                                                        horizontalArrangement = Arrangement.SpaceBetween,
-                                                        verticalAlignment = Alignment.CenterVertically
-                                                    ) {
+                                                    val repHint = when {
+                                                        set.repsCompleted < 8  -> "Too heavy? Go lighter"
+                                                        set.repsCompleted > 12 -> "Too easy? Add weight, aim for 8"
+                                                        else                   -> null
+                                                    }
+                                                    val hintColor = when {
+                                                        set.repsCompleted < 8  -> MaterialTheme.colorScheme.error
+                                                        set.repsCompleted > 12 -> MaterialTheme.colorScheme.tertiary
+                                                        else                   -> MaterialTheme.colorScheme.primary
+                                                    }
+                                                    Column(modifier = Modifier.fillMaxWidth()) {
                                                         Row(
-                                                            verticalAlignment = Alignment.CenterVertically,
-                                                            horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                                            modifier = Modifier
+                                                                .fillMaxWidth()
+                                                                .padding(vertical = 3.dp),
+                                                            horizontalArrangement = Arrangement.SpaceBetween,
+                                                            verticalAlignment = Alignment.CenterVertically
                                                         ) {
-                                                            Icon(
-                                                                Icons.Default.CheckCircle,
-                                                                contentDescription = null,
-                                                                tint = MaterialTheme.colorScheme.primary,
-                                                                modifier = Modifier.size(14.dp)
-                                                            )
+                                                            Row(
+                                                                verticalAlignment = Alignment.CenterVertically,
+                                                                horizontalArrangement = Arrangement.spacedBy(6.dp)
+                                                            ) {
+                                                                Icon(
+                                                                    Icons.Default.CheckCircle,
+                                                                    contentDescription = null,
+                                                                    tint = MaterialTheme.colorScheme.primary,
+                                                                    modifier = Modifier.size(14.dp)
+                                                                )
+                                                                Text(
+                                                                    "Set ${set.setNumber}",
+                                                                    style = MaterialTheme.typography.labelSmall,
+                                                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                                )
+                                                            }
                                                             Text(
-                                                                "Set ${set.setNumber}",
-                                                                style = MaterialTheme.typography.labelSmall,
-                                                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                                                "${set.repsCompleted} reps$weightStr",
+                                                                style = MaterialTheme.typography.labelMedium,
+                                                                fontWeight = FontWeight.Medium,
+                                                                color = MaterialTheme.colorScheme.onSurface
                                                             )
                                                         }
-                                                        Text(
-                                                            "${set.repsCompleted} reps$weightStr",
-                                                            style = MaterialTheme.typography.labelMedium,
-                                                            fontWeight = FontWeight.Medium,
-                                                            color = MaterialTheme.colorScheme.onSurface
-                                                        )
+                                                        if (repHint != null) {
+                                                            Text(
+                                                                repHint,
+                                                                style = MaterialTheme.typography.labelSmall,
+                                                                color = hintColor,
+                                                                modifier = Modifier.padding(start = 20.dp, bottom = 2.dp)
+                                                            )
+                                                        }
                                                     }
                                                 }
                                             }
